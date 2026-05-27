@@ -500,7 +500,7 @@
   }
   .faq-item.open .faq-a { max-height: 200px; padding: 0 32px 24px; }
 
-  /* FINAL CTA */
+  /* FINAL CTA & CONTACT FORM */
   .final-cta {
     background: linear-gradient(135deg, #04050a 0%, #020204 100%);
     text-align: center; padding: 140px 24px;
@@ -523,8 +523,82 @@
     -webkit-text-fill-color: transparent;
     font-style: normal;
   }
-  .final-cta p { color: var(--text-muted); margin-bottom: 48px; font-size: 1.2rem; font-weight: 300; }
+  .final-cta p { color: var(--text-muted); margin-bottom: 40px; font-size: 1.2rem; font-weight: 300; }
   
+  /* Lead capture form styling */
+  .contact-form-wrap {
+    max-width: 600px;
+    margin: 40px auto 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: left;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+    transition: var(--transition);
+  }
+  @media (max-width: 576px) {
+    .contact-form-wrap { padding: 24px; }
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .form-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-main);
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--text-main);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+  .form-input::placeholder { color: #575c66; }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--brand-purple);
+    box-shadow: 0 0 15px var(--brand-purple-glow);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .form-status {
+    display: none;
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .form-status.success {
+    display: block;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+  }
+  .form-status.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+  }
+
   .response-badge {
     display: inline-block;
     background: rgba(255,255,255,0.02); border: 1px solid rgba(123, 47, 247, 0.3);
@@ -617,9 +691,9 @@
   <h1>Automatiza tu negocio con <em>IA</em> y escala tu facturación</h1>
   <p>Sistemas conversacionales premium para empresas de reformas integrales. Captura leads, cualifícalos y agenda obras en piloto automático 24/7.</p>
   <div class="hero-cta-wrap">
-    <a class="btn-wa" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, vengo de la web y quiero automatizar mi negocio en Reformas Integrales" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
-      Quiero esta automatización para mi negocio
+    <a class="btn-wa" href="#formulario-seccion">
+      <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      Comenzar Diagnóstico Gratuito
     </a>
   </div>
 </section>
@@ -728,9 +802,9 @@
       </div>
     </div>
     <div class="flex-center">
-      <a class="btn-wa" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, vengo de la web y quiero automatizar mi negocio en Reformas Integrales" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
-        Saber más del sistema conversacional
+      <a class="btn-wa" href="#formulario-seccion">
+        <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Automatizar mi negocio ahora
       </a>
     </div>
   </div>
@@ -815,8 +889,8 @@
       </div>
     </div>
     <div class="flex-center">
-      <a class="btn-wa" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, vengo de la web y quiero automatizar mi negocio en Reformas Integrales" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
+      <a class="btn-wa" href="#formulario-seccion">
+        <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
         Quiero automatizar mi negocio ya
       </a>
     </div>
@@ -896,19 +970,37 @@
   </div>
 </section>
 
-<!-- 8. FINAL CTA -->
-<section class="final-cta">
+<!-- 8. FINAL CTA & FORM -->
+<section class="final-cta" id="formulario-seccion">
   <div class="glow-bg final-cta-radial"></div>
   <div class="container final-cta-inner">
     <div class="section-label">Cupos Limitados para este mes</div>
     <h2>Agenda tu<br><em>Diagnóstico Gratuito</em></h2>
     <p>Analizaremos tu sistema actual de atención de leads en 20 minutos y te mostraremos una simulación adaptada a tu marca.</p>
-    <div class="flex-center">
-      <a class="btn-wa" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, vengo de la web y quiero automatizar mi negocio en Reformas Integrales" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
-        Agendar Diagnóstico sin costo
-      </a>
+    
+    <!-- CONVERT FORM INTEGRATED -->
+    <div class="contact-form-wrap">
+      <form id="formulario-agencia" onsubmit="enviarDatos(event)">
+        <div class="form-group">
+          <label class="form-label" for="nombre">Nombre Completo / Empresa</label>
+          <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Ej. Juan Gómez - Reformas Premium" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="telefono">Teléfono (WhatsApp)</label>
+          <input class="form-input" type="tel" id="telefono" name="telefono" placeholder="Ej. +34 600 000 000" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="mensaje">¿Qué te gustaría automatizar en tu negocio?</label>
+          <textarea class="form-input" id="mensaje" name="mensaje" rows="4" placeholder="Ej. Captar clientes de reformas en mi zona y cualificar leads por WhatsApp." style="resize: none;" required></textarea>
+        </div>
+        <button type="submit" class="btn-wa btn-submit">
+          <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2.5;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          Solicitar Diagnóstico Gratuito
+        </button>
+      </form>
+      <div id="form-status" class="form-status"></div>
     </div>
+
     <br>
     <div class="response-badge">⚡ Cupos limitados: Solo 4 nuevas integraciones por mes</div>
   </div>
@@ -1042,10 +1134,107 @@
     }
   }
 
+  // MAKE.COM WEBHOOK LEAD DISPATCH WITH EXPONENTIAL BACKOFF RETRY
+  async function enviarDatos(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('formulario-agencia');
+    const submitBtn = form.querySelector('.btn-submit');
+    const statusDiv = document.getElementById('form-status');
+    
+    const nombre = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+    
+    if (!nombre || !telefono || !mensaje) {
+      showStatus('Por favor, completa todos los campos del formulario.', 'error');
+      return;
+    }
+    
+    // UI State: Loading
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+    submitBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2.5; animation: spin 1s linear infinite; margin-right: 8px; width: 18px; height: 18px;">
+        <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)"></circle>
+        <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor"></path>
+      </svg>
+      Enviando datos...
+    `;
+    
+    // Hide old status messages
+    statusDiv.className = 'form-status';
+    statusDiv.style.display = 'none';
+    
+    const urlWebhook = 'https://hook.eu1.make.com/ob1dy87cchw45iqnv5bjgop4jq6fnasr';
+    const payload = {
+      nombre: nombre,
+      telefono: telefono,
+      mensaje: mensaje,
+      origen: 'laibestudio.com',
+      fechaEnvio: new Date().toISOString()
+    };
+    
+    let success = false;
+    let delay = 1000; // start with 1 second delay
+    
+    // Exponential backoff: retries up to 5 times (1s, 2s, 4s, 8s, 16s)
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      try {
+        const response = await fetch(urlWebhook, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        if (response.ok) {
+          success = true;
+          break;
+        }
+      } catch (err) {
+        // Silent catch for connection dropouts during the retry loops
+      }
+      
+      if (attempt < 5) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 2;
+      }
+    }
+    
+    if (success) {
+      showStatus('¡Diagnóstico solicitado correctamente! Tu Agente de IA se activará y te contactaremos en menos de 2 horas.', 'success');
+      form.reset();
+    } else {
+      showStatus('No se ha podido enviar la solicitud debido a un fallo de conexión. Por favor, vuelve a intentarlo o haz clic en el botón de WhatsApp flotante.', 'error');
+    }
+    
+    // Restore UI State
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+    submitBtn.innerHTML = originalBtnText;
+  }
+  
+  function showStatus(message, type) {
+    const statusDiv = document.getElementById('form-status');
+    statusDiv.innerText = message;
+    statusDiv.className = `form-status ${type}`;
+  }
+
   // Pre-execute ROI calculation on page load
   window.onload = function() {
     calculateROI();
   }
 </script>
+
+<style>
+  /* CSS animation helper for form loading state */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
 </body>
 </html>
