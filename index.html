@@ -1173,5 +1173,59 @@
     calculateROI();
   }
 </script>
+    <div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
+    <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</h4>
+    <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
+        Utilizamos cookies propias y de terceros para analizar el tráfico de la web y optimizar tus campañas de automatización. Puedes aceptar todas las cookies, rechazarlas o configurarlas. Lee nuestra <a href="politica-cookies.html" target="_blank" style="color: #0082f3; text-decoration: none;">Política de Cookies</a>.
+    </p>
+    <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+        <button onclick="handleCookies('rechazar')" style="background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;">Rechazar todas</button>
+        <button onclick="handleCookies('aceptar')" style="background: linear-gradient(135deg, #0082f3 0%, #7b2ff7 100%); border: none; color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(123, 47, 247, 0.3);">Aceptar todas</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!localStorage.getItem("cookiesConsent")) {
+            document.getElementById("cookie-banner").style.display = "block";
+        }
+    });
+
+    function handleCookies(action) {
+        localStorage.setItem("cookiesConsent", action);
+        document.getElementById("cookie-banner").style.display = "none";
+        
+        if (action === 'aceptar') {
+            // Aquí activarías tus scripts de seguimiento (Pixel de Meta, Google Analytics, etc.)
+            console.log("Cookies aceptadas por el usuario. Activando scripts...");
+        }
+    }
+</script>
+    <div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
+    <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</h4>
+    <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
+        Utilizamos cookies propias y de terceros para analizar el tráfico de la web y optimizar tus campañas de automatización. Puedes aceptar todas las cookies, rechazarlas o configurarlas. Lee nuestra <a href="politica-cookies.html" target="_blank" style="color: #0082f3; text-decoration: none;">Política de Cookies</a>.
+    </p>
+    <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+        <button onclick="handleCookies('rechazar')" style="background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;">Rechazar todas</button>
+        <button onclick="handleCookies('aceptar')" style="background: linear-gradient(135deg, #0082f3 0%, #7b2ff7 100%); border: none; color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(123, 47, 247, 0.3);">Aceptar todas</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!localStorage.getItem("cookiesConsent")) {
+            document.getElementById("cookie-banner").style.display = "block";
+        }
+    });
+
+    function handleCookies(action) {
+        localStorage.setItem("cookiesConsent", action);
+        document.getElementById("cookie-banner").style.display = "none";
+        if (action === 'aceptar') {
+            console.log("Cookies aceptadas.");
+        }
+    }
+</script>
 </body>
 </html>
