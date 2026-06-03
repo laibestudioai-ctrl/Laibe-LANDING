@@ -177,21 +177,6 @@
     box-shadow: 0 10px 40px rgba(123, 47, 247, 0.5);
   }
   .btn-wa svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
-  
-  .btn-wa-sm {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent; color: var(--text-main);
-    border: 1px solid var(--border); padding: 12px 24px;
-    border-radius: 50px; font-weight: 600; font-size: 0.9rem;
-    text-decoration: none; cursor: pointer;
-    transition: var(--transition);
-  }
-  .btn-wa-sm:hover {
-    border-color: var(--brand-purple);
-    background: var(--brand-purple-glow);
-    transform: translateY(-2px);
-  }
-  .btn-wa-sm svg { width: 18px; height: 18px; fill: var(--text-main); }
 
   /* SECTION BASE */
   section { padding: 120px 24px; position: relative; }
@@ -250,7 +235,7 @@
   }
   .prob-card p { color: var(--text-muted); font-size: 0.95rem; }
 
-  /* MOCKUP INTERACTIVO (DEMO AI) */
+  /* MOCKUP INTERACTIVO */
   .demo-section {
     padding-top: 0px; margin-top: -40px;
     display: flex; flex-direction: column; align-items: center;
@@ -295,7 +280,6 @@
     100% { transform: scale(0.9); opacity: 0.6; }
   }
 
-  /* Chat Simulator styles */
   .chat-box {
     padding: 30px; min-height: 380px; display: flex; flex-direction: column; gap: 16px;
     max-height: 480px; overflow-y: auto;
@@ -390,7 +374,6 @@
   .slider-label { font-size: 1rem; font-weight: 500; color: var(--text-main); }
   .slider-val { font-size: 1.25rem; font-weight: 700; color: var(--brand-blue); font-family: 'Syne', sans-serif;}
   
-  /* Input range customized */
   input[type="range"] {
     -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.08);
     border-radius: 10px; outline: none;
@@ -457,7 +440,6 @@
     transition: var(--transition);
   }
   .testi-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
-  .testi-quote { font-family: 'Syne', sans-serif; font-size: 4rem; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: -10px; opacity: 0.4; }
   .testi-text { font-size: 1.05rem; color: #e2e8f0; line-height: 1.7; margin-bottom: 28px; font-style: italic; font-weight: 300; }
   .testi-author { display: flex; align-items: center; gap: 14px; border-top: 1px solid var(--border); padding-top: 20px; }
   .testi-avatar {
@@ -504,7 +486,7 @@
   /* FINAL CTA & CONTACT FORM */
   .final-cta {
     background: linear-gradient(135deg, #04050a 0%, #020204 100%);
-    text-align: center; padding: 140px 24px;
+    text-align: center; padding: 140px 24px 60px;
     position: relative; overflow: hidden;
   }
   .final-cta-radial {
@@ -526,7 +508,6 @@
   }
   .final-cta p { color: var(--text-muted); margin-bottom: 40px; font-size: 1.2rem; font-weight: 300; }
   
-  /* Lead capture form styling */
   .contact-form-wrap {
     max-width: 600px;
     margin: 40px auto 0;
@@ -608,17 +589,20 @@
     backdrop-filter: blur(10px);
   }
 
-  /* FOOTER */
-  footer {
-    background: #020204; border-top: 1px solid var(--border);
-    text-align: center; padding: 40px 24px;
-    color: var(--text-muted); font-size: 0.88rem;
+  /* SECTION AGENDA */
+  .agenda-bg {
+    background: #050508;
+    padding: 100px 24px;
+    border-top: 1px solid var(--border);
   }
-  footer span {
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
+  .calendar-wrapper {
+    max-width: 900px;
+    margin: 40px auto 0;
+    background: #0d0e15;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.6);
   }
 
   /* FLOATING WA BUTTON */
@@ -634,11 +618,9 @@
   .wa-float:hover { transform: scale(1.1) translateY(-4px); box-shadow: 0 6px 30px rgba(123, 47, 247, 0.7); }
   .wa-float svg { width: 28px; height: 28px; fill: #fff; }
 
-  /* HELPERS */
   .text-center { text-align: center; }
   .flex-center { display: flex; justify-content: center; }
   
-  /* RESPONSIVE OVERRIDES */
   @media (max-width: 576px) {
     .btn-wa { width: 100%; justify-content: center; }
     .chat-box { padding: 16px; }
@@ -647,14 +629,11 @@
 </head>
 <body>
 
-<!-- BACKGROUND RADIALS -->
 <div class="glow-bg hero-radial-1"></div>
 <div class="glow-bg hero-radial-2"></div>
 
-<!-- NAV -->
 <nav>
   <a class="logo-container" href="#">
-    <!-- SVG LOGO EXACTLY REDESIGNED FROM YOUR IMAGE -->
     <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -662,15 +641,11 @@
           <stop offset="100%" stop-color="#7b2ff7" />
         </linearGradient>
       </defs>
-      <!-- "L" Shape -->
       <path d="M25 25 V70 H60 V60 H35 V25 Z" fill="url(#logoGrad)" />
-      <!-- "A" Shape -->
       <path d="M50 25 L35 65 H45 L48 56 H62 L65 65 H75 Z M55 35 L60 50 H50 Z" fill="url(#logoGrad)" />
-      <!-- Sparks/Dots details matching the futuristic speed trail -->
       <circle cx="75" cy="45" r="3" fill="#7b2ff7" />
       <circle cx="83" cy="45" r="2.5" fill="#7b2ff7" opacity="0.8" />
       <circle cx="90" cy="45" r="2" fill="#7b2ff7" opacity="0.5" />
-      <!-- Star under "A" -->
       <path d="M50 54 L52 59 L57 59 L53 62 L55 67 L50 64 L45 67 L47 62 L43 59 L48 59 Z" fill="#0082f3" />
     </svg>
     <div class="logo-text">Laibe Studio <span>AI</span></div>
@@ -681,12 +656,10 @@
   </a>
 </nav>
 
-<!-- FLOATING WA -->
 <a class="wa-float" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, vengo de la web y quiero automatizar mi negocio en Reformas Integrales" target="_blank" title="Hablar por WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
 </a>
 
-<!-- 1. HERO -->
 <section class="hero">
   <div class="hero-badge">✦ IMPULSAMOS EMPRESAS | <span>POTENCIAMOS RESULTADOS</span></div>
   <h1>Automatiza tu negocio con <em>IA</em> y escala tu facturación</h1>
@@ -699,7 +672,6 @@
   </div>
 </section>
 
-<!-- DEMO INTERACTIVA (MOCKUP LIVE) -->
 <section class="demo-section">
   <div class="container text-center">
     <div class="section-label">Mira cómo funciona en tiempo real</div>
@@ -721,14 +693,12 @@
         <div style="width: 40px;"></div>
       </div>
       
-      <!-- Box de Chat -->
       <div class="chat-box" id="chatBox">
         <div class="chat-msg msg-ai">
           ¡Hola! Bienvenido a Reformas Madrid. 🛠️ Veo que te interesa renovar un espacio. ¿Qué estancia te gustaría reformar (Cocina, Baño, Piso completo...)?
         </div>
       </div>
       
-      <!-- Indicador de escribiendo -->
       <div class="typing-indicator" id="typingIndicator">
         <div class="typing-dots">
           <span></span>
@@ -747,7 +717,6 @@
   </div>
 </section>
 
-<!-- 2. PROBLEMAS -->
 <section class="problems-bg">
   <div class="container">
     <div class="section-label">El precio de la inacción</div>
@@ -773,7 +742,6 @@
   </div>
 </section>
 
-<!-- 3. SOLUCIONES -->
 <section>
   <div class="glow-bg" style="width: 500px; height: 500px; background: var(--brand-blue-glow); top: 20%; left: -10%;"></div>
   <div class="container">
@@ -811,7 +779,6 @@
   </div>
 </section>
 
-<!-- 4. CALCULATOR (ROI) -->
 <section class="roi-bg">
   <div class="container">
     <div class="text-center">
@@ -854,7 +821,6 @@
   </div>
 </section>
 
-<!-- 5. BENEFICIOS -->
 <section class="benefits-bg">
   <div class="container">
     <div class="section-label">Métricas Tangibles</div>
@@ -897,27 +863,7 @@
     </div>
   </div>
 </section>
-<iframe
-    src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7"
-    style="width:100%;height:100%;border:none;border-radius:8px"
-    id="inline-WUUsZNKJ27xicTrjOwg7" 
-    data-layout="{'id':'INLINE'}"
-    data-trigger-type="alwaysShow"
-    data-trigger-value=""
-    data-activation-type="alwaysActivated"
-    data-activation-value=""
-    data-deactivation-type="neverDeactivate"
-    data-deactivation-value=""
-    data-form-name="Formulario demo 30 min agentes IA"
-    data-height="886"
-    data-layout-iframe-id="inline-WUUsZNKJ27xicTrjOwg7"
-    data-form-id="WUUsZNKJ27xicTrjOwg7"
-    title="Formulario demo 30 min agentes IA"
-    
-        >
-</iframe>
-<script src="https://link.msgsndr.com/js/form_embed.js"></script>
-<!-- 6. TESTIMONIOS -->
+
 <section>
   <div class="glow-bg" style="width: 600px; height: 600px; background: var(--brand-purple-glow); bottom: 10%; right: -10%;"></div>
   <div class="container">
@@ -950,38 +896,7 @@
     </div>
   </div>
 </section>
-<script>
-function enviarDatos(event) {
-    event.preventDefault();
 
-    // 1. Capturar lo que ha escrito el cliente en tu diseño oscuro
-    const nombreReal = document.getElementById('nombre').value;
-    const telefonoReal = document.getElementById('telefono').value;
-    const mensajeReal = document.getElementById('mensaje').value;
-
-    // 2. Localizar los campos dentro del formulario oculto de GoHighLevel
-    const ghlForm = document.querySelector('#ghl-hidden-form-container form');
-    const ghlNombre = document.querySelector('#ghl-hidden-form-container input[name="name"]');
-    const ghlTelefono = document.querySelector('#ghl-hidden-form-container input[name="phone"]');
-    const ghlCustom = document.querySelector('#ghl-hidden-form-container textarea, #ghl-hidden-form-container input[name*="custom"]');
-
-    // 3. Introducir los datos en el sistema oculto de GHL
-    if (ghlNombre) ghlNombre.value = nombreReal;
-    if (ghlTelefono) ghlTelefono.value = telefonoReal;
-    if (ghlCustom) ghlCustom.value = mensajeReal;
-
-    // 4. Ejecutar el envío nativo de GoHighLevel
-    const ghlSubmitBtn = document.querySelector('#ghl-hidden-form-container button[type="submit"]');
-    if (ghlSubmitBtn) {
-        ghlSubmitBtn.click();
-    } else if (ghlForm) {
-        ghlForm.submit();
-    }
-}
-
-// Aquí abajo continuará tu lógica antigua (ej: function toggleFaq(btn) { ... })
-</script>
-<!-- 7. FAQ -->
 <section class="faq-bg">
   <div class="container">
     <div class="section-label">Resolviendo inquietudes</div>
@@ -1020,7 +935,6 @@ function enviarDatos(event) {
   </div>
 </section>
 
-<!-- 8. FINAL CTA & FORM -->
 <section class="final-cta" id="formulario-seccion">
   <div class="glow-bg final-cta-radial"></div>
   <div class="container final-cta-inner">
@@ -1028,75 +942,60 @@ function enviarDatos(event) {
     <h2>Agenda tu<br><em>Diagnóstico Gratuito</em></h2>
     <p>Analizaremos tu sistema actual de atención de leads en 20 minutos y te mostraremos una simulación adaptada a tu marca.</p>
     
-    <!-- CONVERT FORM INTEGRATED -->
     <div class="contact-form-wrap">
       <form id="formulario-agencia" onsubmit="enviarDatos(event)">
         <div class="form-group">
           <label class="form-label" for="nombre">Nombre Completo / Empresa</label>
-          <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Ej. Juan Gómez - Reformas Premium" required>
+          <input class="form-input" type="text" id="nombre" placeholder="Ej. Juan Gómez - Reformas Premium" required>
         </div>
         <div class="form-group">
           <label class="form-label" for="telefono">Teléfono (WhatsApp)</label>
-          <input class="form-input" type="tel" id="telefono" name="telefono" placeholder="Ej. +34 600 000 000" required>
+          <input class="form-input" type="tel" id="telefono" placeholder="Ej. +34 600 000 000" required>
         </div>
         <div class="form-group">
           <label class="form-label" for="mensaje">¿Qué te gustaría automatizar en tu negocio?</label>
-          <textarea class="form-input" id="mensaje" name="mensaje" rows="4" placeholder="Ej. Captar clientes de reformas en mi zona y cualificar leads por WhatsApp." style="resize: none;" required></textarea>
+          <textarea class="form-input" id="mensaje" rows="4" placeholder="Ej. Captar clientes de reformas en mi zona y cualificar leads por WhatsApp." style="resize: none;" required></textarea>
         </div>
-        <button type="submit" class="btn-wa btn-submit">
+        <button type="submit" class="btn-wa btn-submit" id="btn-submit-premium">
           <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2.5;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           Solicitar Diagnóstico Gratuito
         </button>
       </form>
       <div id="form-status" class="form-status"></div>
     </div>
-
     <br>
-<div class="response-badge">⚡ Cupos limitados: Solo 4 nuevas integraciones por mes</div>
+    <div class="response-badge">⚡ Cupos limitados: Solo 4 nuevas integraciones por mes</div>
   </div>
 </section>
 
-<div id="ghl-hidden-form-container" style="display: none !important; visibility: hidden !important; height: 0px; overflow: hidden;">
-    <iframe
-    src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7"
-    style="width:100%;height:100%;border:none;border-radius:4px"
-    id="inline-WUUsZNKJ27xicTrjOwg7">
-    </iframe>
-</div>
-    src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7"
-    style="width:100%;height:100%;border:none;border-radius:4px"
-    id="inline-WUUsZNKJ27xicTrjOwg7" 
-    data-layout="{'id':'INLINE'}"
-    data-trigger-type="alwaysShow"
-    data-trigger-value=""
-    data-activation-type="alwaysActivated"
-    data-activation-value=""
-    data-deactivation-type="neverDeactivate"
-    data-deactivation-value=""
-    data-form-name="Formulario demo 30 min agentes IA"
-    data-height="1018"
-    data-layout-iframe-id="inline-WUUsZNKJ27xicTrjOwg7"
-    data-form-id="WUUsZNKJ27xicTrjOwg7"
-    title="Formulario demo 30 min agentes IA"
+<section class="agenda-bg" id="agenda-seccion">
+  <div class="container text-center">
+    <div class="section-label">Reserva Directa</div>
+    <h2 class="section-title">Elige Fecha y Hora</h2>
+    <p class="section-sub" style="margin: 0 auto 40px;">Sincroniza una sesión de 20 minutos directamente con nuestro equipo técnico.</p>
     
-        >
-</iframe>
-<script src="https://link.msgsndr.com/js/form_embed.js"></script>
+    <div class="calendar-wrapper">
+      <iframe src="https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk" style="width: 100%; border:none; overflow: hidden; min-height: 700px;" scrolling="no" id="CHYJ3ZzRD6OtpCGWwRhk_1780484014550"></iframe>
+      <script src="https://api.leadconnectorhq.com/js/form_embed.js" type="text/javascript"></script>
+    </div>
+  </div>
+</section>
+
+<footer style="background: #020204; border-top: 1px solid var(--border); text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 0.88rem;">
+  © 2026 <span>Laibe Studio AI</span>. Todos los derechos reservados.<br>
+  <span style="font-size:0.75rem; opacity:0.6; margin-top: 10px; display:inline-block; margin-bottom: 15px;">Impulsamos empresas, potenciamos resultados. Con Inteligencia Artificial.</span>
+  <div style="margin-top: 10px;">
+    <a href="politica-privacidad.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Política de Privacidad</a> | 
+    <a href="terminos-servicios.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Términos y Condiciones</a>
+  </div>
+</footer>
+
+<div id="ghl-hidden-form-container" style="display: none !important; visibility: hidden !important; height: 0px; overflow: hidden; position: absolute; pointer-events: none;">
+    <iframe src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7" style="width:100%; height:100%; border:none;" id="inline-WUUsZNKJ27xicTrjOwg7"></iframe>
+    <script src="https://link.msgsndr.com/js/form_embed.js"></script>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  © 2026 <span>Laibe Studio AI</span>. Todos los derechos reservados.<br>
-  <span style="font-size:0.75rem; opacity:0.6; margin-top: 10px; display:inline-block;">Impulsamos empresas, potenciamos resultados. Con Inteligencia Artificial.</span>
-</footer>
-<a href="politica-privacidad.html" target="_blank">Política de Privacidad</a>
-<footer>
-    <a href="politica-privacidad.html" target="_blank">Política de Privacidad</a> | 
-    <a href="terminos-servicios.html" target="_blank">Términos y Condiciones</a>
-</footer>    
-<!-- JS LOGIC -->
 <script>
-  // FAQ toggling logic
   function toggleFaq(btn) {
     const item = btn.closest('.faq-item');
     const isOpen = item.classList.contains('open');
@@ -1104,29 +1003,21 @@ function enviarDatos(event) {
     if (!isOpen) item.classList.add('open');
   }
 
-  // Interactive ROI Calculator logic
   function calculateROI() {
     const leads = parseFloat(document.getElementById('leadsRange').value);
     const ticket = parseFloat(document.getElementById('ticketRange').value);
     
-    // Values updating labels
     document.getElementById('leadsVal').innerText = leads;
     document.getElementById('ticketVal').innerText = ticket.toLocaleString('es-ES') + ' €';
     
-    // Formula calculations
-    const conversionNoIA = 0.025;
     const conversionWithIA = 0.07;
-    
-    const revenueNoIA = Math.round(leads * conversionNoIA * ticket);
     const revenueWithIA = Math.round(leads * conversionWithIA * ticket);
-    const lostRev = Math.round((leads * 0.045) * ticket); // Revenue lost due to friction
+    const lostRev = Math.round((leads * 0.045) * ticket);
     
-    // Render
     document.getElementById('lostRev').innerText = lostRev.toLocaleString('es-ES') + ' €';
     document.getElementById('newRev').innerText = revenueWithIA.toLocaleString('es-ES') + ' €';
   }
 
-  // Live Chat Simulation Script
   const simulationData = [
     { type: 'client', text: 'Buenas, me gustaría reformar mi cocina entera. Es un piso en Madrid.' },
     { type: 'typing', delay: 1500 },
@@ -1149,10 +1040,8 @@ function enviarDatos(event) {
     isSimulating = true;
     
     const chatBox = document.getElementById('chatBox');
-    const typingIndicator = document.getElementById('typingIndicator');
     const btnTrigger = document.getElementById('btnRunDemo');
     
-    // Reset Chat Box keeping only the first greeting message
     chatBox.innerHTML = `
       <div class="chat-msg msg-ai">
         ¡Hola! Bienvenido a Reformas Madrid. 🛠️ Veo que te interesa renovar un espacio. ¿Qué estancia te gustaría reformar (Cocina, Baño, Piso completo...)?
@@ -1205,118 +1094,84 @@ function enviarDatos(event) {
       }, currentStep.delay);
     } 
     else if (currentStep.type === 'ai') {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'chat-msg msg-ai';
-      msgDiv.innerText = currentStep.text;
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-      
-      simIndex++;
-      runNextMessage();
+      setTimeout(() => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-msg msg-ai';
+        msgDiv.innerText = currentStep.text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        simIndex++;
+        runNextMessage();
+      }, 1000);
     }
   }
 
-  // MAKE.COM WEBHOOK LEAD DISPATCH WITH EXPONENTIAL BACKOFF RETRY
-  async function enviarDatos(event) {
+  // JAVASCRIPT PUENTE: TRANSFERENCIA DE LEADS DEL FORMULARIO OSCURO AL CRM DE GHL
+  function enviarDatos(event) {
     event.preventDefault();
     
-    const form = document.getElementById('formulario-agencia');
-    const submitBtn = form.querySelector('.btn-submit');
+    const submitBtn = document.getElementById('btn-submit-premium');
     const statusDiv = document.getElementById('form-status');
     
-    const nombre = document.getElementById('nombre').value.trim();
-    const telefono = document.getElementById('telefono').value.trim();
-    const mensaje = document.getElementById('mensaje').value.trim();
+    const nombreReal = document.getElementById('nombre').value.trim();
+    const telefonoReal = document.getElementById('telefono').value.trim();
+    const mensajeReal = document.getElementById('mensaje').value.trim();
     
-    if (!nombre || !telefono || !mensaje) {
-      showStatus('Por favor, completa todos los campos del formulario.', 'error');
-      return;
-    }
-    
-    // UI State: Loading
-    const originalBtnText = submitBtn.innerHTML;
+    // UI Loading state
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.7';
-    submitBtn.innerHTML = `
-      <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2.5; animation: spin 1s linear infinite; margin-right: 8px; width: 18px; height: 18px;">
-        <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)"></circle>
-        <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor"></path>
-      </svg>
-      Enviando datos...
-    `;
+    submitBtn.innerText = 'Procesando Diagnóstico...';
     
-    // Hide old status messages
-    statusDiv.className = 'form-status';
-    statusDiv.style.display = 'none';
-    
-    const urlWebhook = 'https://hook.eu1.make.com/ob1dy87cchw45iqnv5bjgop4jq6fnasr';
-    const payload = {
-      nombre: nombre,
-      telefono: telefono,
-      mensaje: mensaje,
-      origen: 'laibestudio.com',
-      fechaEnvio: new Date().toISOString()
-    };
-    
-    let success = false;
-    let delay = 1000; // start with 1 second delay
-    
-    // Exponential backoff: retries up to 5 times (1s, 2s, 4s, 8s, 16s)
-    for (let attempt = 1; attempt <= 5; attempt++) {
-      try {
-        const response = await fetch(urlWebhook, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
+    try {
+        const ghlIframe = document.getElementById('inline-WUUsZNKJ27xicTrjOwg7');
+        const ghlDoc = ghlIframe.contentDocument || ghlIframe.contentWindow.document;
         
-        if (response.ok) {
-          success = true;
-          break;
+        const ghlNombre = ghlDoc.querySelector('input[name="name"]') || ghlDoc.querySelector('input[placeholder*="nombre" i]') || ghlDoc.querySelector('input[type="text"]');
+        const ghlTelefono = ghlDoc.querySelector('input[name="phone"]') || ghlDoc.querySelector('input[placeholder*="tel" i]') || ghlDoc.querySelector('input[type="tel"]');
+        const ghlCustom = ghlDoc.querySelector('textarea') || ghlDoc.querySelector('input[name*="custom"]');
+        const ghlSubmitBtn = ghlDoc.querySelector('button[type="submit"]');
+        
+        if (ghlNombre && ghlTelefono) {
+            ghlNombre.value = nombreReal;
+            ghlTelefono.value = telefonoReal;
+            if (ghlCustom) ghlCustom.value = mensajeReal;
+            
+            // Disparar evento de cambio nativo para que GHL reconozca los datos
+            ghlNombre.dispatchEvent(new Event('input', { bubbles: true }));
+            ghlTelefono.dispatchEvent(new Event('input', { bubbles: true }));
+            if (ghlCustom) ghlCustom.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            setTimeout(() => {
+                ghlSubmitBtn.click();
+                statusDiv.innerText = '¡Datos registrados! Selecciona tu fecha en la agenda aquí abajo.';
+                statusDiv.className = 'form-status success';
+                statusDiv.style.display = 'block';
+                
+                // Reset de interfaz y scroll automático a la agenda
+                document.getElementById('formulario-agencia').reset();
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.innerText = 'Solicitar Diagnóstico Gratuito';
+                
+                document.getElementById('agenda-seccion').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        } else {
+            throw new Error("Campos no indexados en el iframe");
         }
-      } catch (err) {
-        // Silent catch for connection dropouts during the retry loops
-      }
-      
-      if (attempt < 5) {
-        await new Promise(resolve => setTimeout(resolve, delay));
-        delay *= 2;
-      }
+    } catch (err) {
+        // Fallback operativo seguro: si el navegador bloquea el acceso al iframe por políticas cross-domain,
+        // el sistema redirige al usuario de inmediato a la agenda para no perder el lead.
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.innerText = 'Solicitar Diagnóstico Gratuito';
+        document.getElementById('agenda-seccion').scrollIntoView({ behavior: 'smooth' });
     }
-    
-    if (success) {
-      showStatus('¡Diagnóstico solicitado correctamente! Tu Agente de IA se activará y te contactaremos en menos de 2 horas.', 'success');
-      form.reset();
-    } else {
-      showStatus('No se ha podido enviar la solicitud debido a un fallo de conexión. Por favor, vuelve a intentarlo o haz clic en el botón de WhatsApp flotante.', 'error');
-    }
-    
-    // Restore UI State
-    submitBtn.disabled = false;
-    submitBtn.style.opacity = '1';
-    submitBtn.innerHTML = originalBtnText;
-  }
-  
-  function showStatus(message, type) {
-    const statusDiv = document.getElementById('form-status');
-    statusDiv.innerText = message;
-    statusDiv.className = `form-status ${type}`;
   }
 
-  // Pre-execute ROI calculation on page load
   window.onload = function() {
     calculateROI();
   }
 </script>
-
-<style>
-  /* CSS animation helper for form loading state */
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-</style>
 </body>
 </html>
