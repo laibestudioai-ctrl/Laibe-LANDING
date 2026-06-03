@@ -950,7 +950,37 @@
     </div>
   </div>
 </section>
+<script>
+function enviarDatos(event) {
+    event.preventDefault();
 
+    // 1. Capturar lo que ha escrito el cliente en tu diseño oscuro
+    const nombreReal = document.getElementById('nombre').value;
+    const telefonoReal = document.getElementById('telefono').value;
+    const mensajeReal = document.getElementById('mensaje').value;
+
+    // 2. Localizar los campos dentro del formulario oculto de GoHighLevel
+    const ghlForm = document.querySelector('#ghl-hidden-form-container form');
+    const ghlNombre = document.querySelector('#ghl-hidden-form-container input[name="name"]');
+    const ghlTelefono = document.querySelector('#ghl-hidden-form-container input[name="phone"]');
+    const ghlCustom = document.querySelector('#ghl-hidden-form-container textarea, #ghl-hidden-form-container input[name*="custom"]');
+
+    // 3. Introducir los datos en el sistema oculto de GHL
+    if (ghlNombre) ghlNombre.value = nombreReal;
+    if (ghlTelefono) ghlTelefono.value = telefonoReal;
+    if (ghlCustom) ghlCustom.value = mensajeReal;
+
+    // 4. Ejecutar el envío nativo de GoHighLevel
+    const ghlSubmitBtn = document.querySelector('#ghl-hidden-form-container button[type="submit"]');
+    if (ghlSubmitBtn) {
+        ghlSubmitBtn.click();
+    } else if (ghlForm) {
+        ghlForm.submit();
+    }
+}
+
+// Aquí abajo continuará tu lógica antigua (ej: function toggleFaq(btn) { ... })
+</script>
 <!-- 7. FAQ -->
 <section class="faq-bg">
   <div class="container">
@@ -1046,43 +1076,6 @@
         >
 </iframe>
 <script src="https://link.msgsndr.com/js/form_embed.js"></script>
-document.addEventListener("DOMContentLoaded", function () {
-    const btnBonito = document.getElementById('ui-btn-submit');
-    
-    if (btnBonito) {
-        btnBonito.addEventListener('click', function (e) {
-            e.preventDefault(); // Evita que la página se recargue inmediatamente
-            
-            // 1. Capturar los valores que el cliente escribió en tu formulario bonito
-            const nombreReal = document.getElementById('ui-nombre').value;
-            const telefonoReal = document.getElementById('ui-telefono').value;
-            const automatizarReal = document.getElementById('ui-automatizar').value;
-            
-            // 2. Localizar los inputs reales dentro del formulario oculto de GoHighLevel
-            // Nota: GHL suele usar selectores name como "name", "phone" o campos personalizados
-            const ghlForm = document.querySelector('#ghl-hidden-form-container form');
-            const ghlNombre = document.querySelector('#ghl-hidden-form-container input[name="name"]');
-            const ghlTelefono = document.querySelector('#ghl-hidden-form-container input[name="phone"]');
-            
-            // Para el campo personalizado de "Qué quieres automatizar", GHL suele usar un name tipo "custom_field_..."
-            // Buscamos cualquier textarea o input extra que tenga el formulario de GHL
-            const ghlCustom = document.querySelector('#ghl-hidden-form-container textarea, #ghl-hidden-form-container input[name*="custom"]');
-
-            // 3. Inyectar los datos en el formulario de GoHighLevel
-            if (ghlNombre) ghlNombre.value = nombreReal;
-            if (ghlTelefono) ghlTelefono.value = telefonoReal;
-            if (ghlCustom) ghlCustom.value = automatizarReal;
-            
-            // 4. Buscar el botón de enviar nativo de GHL y hacerle clic automático
-            const ghlSubmitBtn = document.querySelector('#ghl-hidden-form-container button[type="submit"]');
-            if (ghlSubmitBtn) {
-                ghlSubmitBtn.click();
-            } else if (ghlForm) {
-                ghlForm.submit();
-            }
-        });
-    }
-});
 </div>
 
 <!-- FOOTER -->
