@@ -1025,7 +1025,57 @@
     <div class="response-badge">⚡ Cupos limitados: Solo 4 nuevas integraciones por mes</div>
   </div>
 </section>
+<div id="ghl-hidden-form-container" style="display: none;">
+    <iframe
+    src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7"
+    style="width:100%;height:100%;border:none;border-radius:4px"
+    id="inline-WUUsZNKJ27xicTrjOwg7" 
+    data-layout="{'id':'INLINE'}"
+    data-trigger-type="alwaysShow"
+    data-trigger-value=""
+    data-activation-type="alwaysActivated"
+    data-activation-value=""
+    data-deactivation-type="neverDeactivate"
+    data-deactivation-value=""
+    data-form-name="Formulario demo 30 min agentes IA"
+    data-height="1018"
+    data-layout-iframe-id="inline-WUUsZNKJ27xicTrjOwg7"
+    data-form-id="WUUsZNKJ27xicTrjOwg7"
+    title="Formulario demo 30 min agentes IA"
+    
+        >
+</iframe>
+<script src="https://link.msgsndr.com/js/form_embed.js"></script>
+</div>
+    function enviarDatos(event) {
+    event.preventDefault(); // Evita que la web se recargue antes de tiempo
 
+    // 1. Capturar lo que ha escrito el cliente en tu diseño oscuro
+    const nombreReal = document.getElementById('nombre').value;
+    const telefonoReal = document.getElementById('telefono').value;
+    const mensajeReal = document.getElementById('mensaje').value;
+
+    // 2. Localizar los campos dentro del formulario oculto de GoHighLevel
+    const ghlForm = document.querySelector('#ghl-hidden-form-container form');
+    const ghlNombre = document.querySelector('#ghl-hidden-form-container input[name="name"]');
+    const ghlTelefono = document.querySelector('#ghl-hidden-form-container input[name="phone"]');
+    
+    // GHL usa textareas o inputs con la palabra custom para preguntas adicionales
+    const ghlCustom = document.querySelector('#ghl-hidden-form-container textarea, #ghl-hidden-form-container input[name*="custom"]');
+
+    // 3. Introducir los datos en el sistema oculto de GHL
+    if (ghlNombre) ghlNombre.value = nombreReal;
+    if (ghlTelefono) ghlTelefono.value = telefonoReal;
+    if (ghlCustom) ghlCustom.value = mensajeReal;
+
+    // 4. Ejecutar el envío nativo de GoHighLevel
+    const ghlSubmitBtn = document.querySelector('#ghl-hidden-form-container button[type="submit"]');
+    if (ghlSubmitBtn) {
+        ghlSubmitBtn.click();
+    } else if (ghlForm) {
+        ghlForm.submit();
+    }
+}
 <!-- FOOTER -->
 <footer>
   © 2026 <span>Laibe Studio AI</span>. Todos los derechos reservados.<br>
