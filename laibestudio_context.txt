@@ -1,0 +1,184 @@
+================================================================================
+          DOSSIER DE CONTEXTO Y DOCUMENTACIÓN DE PROYECTO: LAIBE STUDIO AI
+================================================================================
+Última actualización: 2026-06-08
+Fichero: laibestudio_context.txt
+Directorio del Proyecto: C:\Users\Natal\Documents\antigravity\Laibe-LANDING
+Propietario / Fundador: Juan Pablo Guerrero
+Contacto Comercial: +34 633 557 024
+Sitio Web Oficial: laibestudioai.com
+================================================================================
+
+1. INFORMACIÓN GENERAL Y PROPUESTA DE VALOR
+--------------------------------------------------------------------------------
+Laibe Studio AI es una agencia especializada en la digitalización, optimización y
+automatización de procesos comerciales y operativos mediante Inteligencia Artificial,
+diseñada específicamente para el nicho de:
+- Empresas de reformas integrales.
+- Constructoras medianas y locales.
+- Autónomos y gremios del sector de la construcción.
+
+Misión principal:
+Ayudar a los empresarios de reformas a duplicar su facturación y liberar más de
+40 horas al mes eliminando tareas manuales repetitivas. Esto se logra sustituyendo
+los procesos manuales tradicionales (Excel, presupuestos redactados desde cero,
+atención tardía de leads, publicación manual en redes) por un sistema automatizado
+integral (Piloto Automático para Reformas).
+
+Propuesta de Valor Core (Copywriting):
+"Multiplica x2 la capacidad de tu empresa de reformas sin contratar personal.
+Automatizamos tu captación, tus presupuestos y tu CRM con Inteligencia Artificial."
+
+
+2. ESTRUCTURA Y COPYWRITING DE LA LANDING PAGE (laibestudioai.com)
+--------------------------------------------------------------------------------
+El código de la web se encuentra en:
+[index.html](file:///C:/Users/Natal/Documents/antigravity/Laibe-LANDING/index.html)
+
+A. Diseño Visual e Identidad de Marca:
+- Estilo: Premium con estética "Glassmorphism", modo oscuro nativo, degradados suaves.
+- Tipografía: Outfit (Google Fonts).
+- Paleta de Colores (Regla 60-30-10):
+  * Fondo principal (60%): Gris oscuro / Negro tecnológico (#0d0e15).
+  * Texto y legibilidad (30%): Blanco roto / Gris pizarra (#f8fafc y #94a3b8).
+  * Detalles y Acentos (10%): Azul Eléctrico (#0082f3) y Púrpura/Morado (#7b2ff7).
+
+B. Secciones Principales:
+1. Navegación (Navbar):
+   - Logo de Laibe Studio AI.
+   - Enlaces de salto: Inicio, Problemas, Soluciones, ROI, Opiniones.
+   - Botón CTA de WhatsApp "Hablar ahora". (Optimizado para móviles: en pantallas
+     pequeñas el texto se oculta y se convierte en un icono circular para evitar desbordes).
+2. Cabecera (Hero Section):
+   - Titular de alto impacto enfocado en reformas.
+   - Subtexto de dolor y solución.
+   - Botones duales: "Agendar Diagnóstico Gratuito" y "Ver Demostración".
+   - Mockup interactivo del chat de IA (centrado en móviles y pantallas grandes).
+3. El Caos Manual (Sección de Problemas):
+   - Leads perdidos por responder tarde (más de 15 minutos reduce el cierre un 80%).
+   - Horas redactando presupuestos (picando datos de facturas en hojas de Excel).
+   - CRM desactualizado (se olvidan los seguimientos de visitas técnicas).
+   - Redes sociales abandonadas por falta de tiempo.
+4. El Piloto Automático (Sección de Soluciones):
+   - Calificación por WhatsApp 24/7 (Sofía responde al instante y filtra).
+   - Presupuestador Inteligente (IA que lee mediciones y genera el Excel en segundos).
+   - Sincronización de CRM Autónoma (Airtable/GHL actualizado sin esfuerzo).
+   - Generación de Contenido Automático (Reels y carruseles creados e indexados por IA).
+5. Calculadora de ROI Interactiva:
+   - Permite al usuario mover barras deslizantes:
+     * Leads mensuales.
+     * Horas dedicadas manualmente a cada lead.
+     * Tasa de cierre promedio.
+     * Valor medio de una reforma (por defecto 25.000€).
+   - Calcula de forma dinámica el Dinero Perdido anual por falta de automatización
+     y las Horas de Trabajo esclavas que se pueden ahorrar.
+6. Comparador Dinámico (Excel Manual vs. Airtable Automatizado):
+   - Demuestra visualmente por qué Airtable actúa como un CRM moderno e interactivo
+     frente al caos de celdas de Excel.
+7. Formulario de Captación de Leads (Diagnóstico Gratuito):
+   - Captura: Nombre, Teléfono y Mensaje de interés.
+   - Funcionamiento técnico: Hace un envío POST en segundo plano (fetch) directo a
+     n8n. Muestra un mensaje de éxito y hace scroll suave hacia la agenda de GHL.
+8. Agenda Calendario (GHL Embedded):
+   - Widget iframe de calendario oficial de GoHighLevel para reservar día y hora de
+     la llamada de Diagnóstico Gratuito de 20 minutos.
+
+
+3. INFRAESTRUCTURA TECNOLÓGICA Y SERVIDORES
+--------------------------------------------------------------------------------
+El backend de la agencia está auto-hospedado en un VPS Hostinger con Easypanel:
+- Dirección IP del VPS: 76.13.152.6
+- Panel de control Easypanel: Puerto 3000 (Administrador de contenedores Docker).
+- Servidor n8n:
+  * URL Pública: https://76.13.152.6.sslip.io (o puerto local 8085 en Easypanel).
+  * Persistencia de datos: Configurada en el volumen de Docker `/home/node/.n8n`
+    para evitar pérdidas de credenciales o flujos tras reinicios.
+  * Versión activa: 2.23.4 (Community Edition con soporte nativo de APIs).
+- Evolution API (WhatsApp Gateway):
+  * Contenedor Docker: `laibestudio-infraestructura-evolution-api` (Puerto 8080).
+  * URL de Red Docker interna para llamadas n8n:
+    `http://laibestudio-infraestructura-evolution-api:8080`
+  * Endpoint de envío de texto:
+    `POST /message/sendText/LaibeStudio` (instancia de producción: LaibeStudio).
+  * Cabecera obligatoria de autenticación: `apikey` (gestionada en los HTTP Request).
+
+
+4. LOGICA DE LOS WORKFLOWS EN n8n
+--------------------------------------------------------------------------------
+
+FLUJO 1: CAPTURA DE CONTACTOS (Web Leads a Airtable y Notificación WhatsApp)
+Fichero local: [n8n_laibe_leads_workflow.json](file:///C:/Users/Natal/Documents/antigravity/Laibe-LANDING/n8n_laibe_leads_workflow.json)
+- Trigger: Webhook POST en la ruta `laibe-studio-leads`.
+- Acción 1: Guarda el lead en Airtable (Base de Leads, Tabla "Leads"), registrando
+  Nombre, Teléfono y Estado ("Nuevo").
+- Acción 2: Envía una alerta de WhatsApp al administrador (+34 633 557 024) mediante
+  Evolution API con los datos del nuevo contacto.
+- Acción 3 (Trigger del Bot): Hace un POST automático al Webhook del chatbot para
+  que el bot inicie la conversación en frío saludando al cliente por su nombre.
+
+FLUJO 2: CHATBOT DE CUALIFICACIÓN POR WHATSAPP (Sofía - IA con Memoria)
+Fichero local: [n8n_laibestudio_whatsapp_bot_standard_nodes.json](file:///C:/Users/Natal/Documents/antigravity/Laibe-LANDING/n8n_laibestudio_whatsapp_bot_standard_nodes.json)
+- Tipo: Estructura compatible con n8n v2 basada en nodos estándar (sin dependencias
+  externas de LangChain para evitar errores de carga en servidores restringidos).
+- Funcionamiento paso a paso:
+  1. Trigger Webhook: Escucha en `laibestudio-whatsapp-leads` tanto mensajes entrantes
+     de la Evolution API como reenvíos automáticos del formulario de la landing.
+  2. Buscar Historial: Llama al endpoint `POST /chat/findMessages/LaibeStudio` de la
+     Evolution API para recuperar los últimos 6 mensajes del chat del cliente. Esto
+     actúa como una memoria dinámica transparente sin bases de datos adicionales.
+  3. Preparar Prompt (Código JS):
+     * Identifica si es un lead nuevo (se le saluda por su nombre) o un mensaje de chat.
+     * Limpia y concatena los mensajes anteriores en un diálogo ordenado cronológicamente.
+     * Inyecta la Identidad de Sofía y las directrices comerciales.
+  4. Llamar a Gemini: Hace un POST HTTPS a la API oficial de Google Gemini 1.5 Flash
+     pasándole las instrucciones del sistema, el historial del chat y el nuevo mensaje.
+  5. WhatsApp Out: Toma el texto generado por Gemini y lo envía al cliente a través
+     de la Evolution API con un retraso natural de simulación de escritura (delay: 1200ms).
+
+
+5. IDENTIDAD Y DIRECTRICES DEL AGENTE DE IA (SOFÍA)
+--------------------------------------------------------------------------------
+El prompt de Sofía está diseñado bajo estrictas reglas de captación B2B:
+
+A. Identidad y Canal:
+- Nombre: Sofía, asistente comercial automatizada de Laibe Studio AI.
+- Canal: WhatsApp.
+- Formato de respuesta: Mensajes cortos (máximo 2 líneas), tono profesional,
+  directo, empático y persuasivo.
+- Regla de oro: Realizar únicamente UNA pregunta por mensaje.
+
+B. Proceso de Cualificación (Filtros):
+1. Validación del Negocio: Confirmar si el contacto es una empresa de reformas,
+   constructora o autónomo del sector (su nicho ideal).
+2. Dolor Operativo (Fricción): Identificar cuál es su mayor cuello de botella actual:
+   * Pierde clientes por tardar en responderles.
+   * Pasa noches y fines de semana picando presupuestos de facturas a mano en Excel.
+   * No tiene un CRM organizado (pierde control de seguimientos).
+3. Presupuesto (Filtro Económico): Explicar sutilmente que un desarrollo e
+   implementación de IA a medida en su negocio arranca en un rango de inversión
+   de entre 1.000€ y 1.500€. Preguntar directamente si están abiertos a invertir
+   para solucionar sus cuellos de botella y duplicar sus ventas.
+
+C. Conversión (Cierre):
+- Una vez calificado el interés y presupuesto del cliente, ofrecer una llamada de
+  Diagnóstico Gratuito de 20 minutos.
+- Instrucciones de agenda: Redirigir al cliente a la sección de reserva del
+  calendario oficial en: laibestudioai.com/#agenda-seccion (nunca dar horas
+  fijas en el chat, el cliente debe agendar en el widget de GHL).
+
+
+6. ESTRATEGIA DE CONTENIDOS EN INSTAGRAM (@juanpabloguerre.ai)
+--------------------------------------------------------------------------------
+Laibe Studio AI cuenta con un sistema de publicación autónomo integrado en el
+ordenador local mediante un servidor MCP (Model Context Protocol) que se conecta
+a la API oficial de Instagram:
+- Archivo de configuración: `claude_desktop_config.json` en AppData.
+- Script de ejecución directa: `publish-cli.js` en el servidor MCP de Instagram.
+- Estrategia de contenidos (Posteo Lunes-Miércoles-Viernes entre 18:00 y 20:30):
+  * Carruseles en Canva (Paleta #0d0e15 background, #f8fafc texto, #7b2ff7 púrpura destacado).
+  * Temas de alto valor: Comparativas "Excel vs. Airtable", "Cómo automatizar la
+    cualificación de leads por WhatsApp", "El coste real de hacer presupuestos manuales".
+
+================================================================================
+FIN DEL DOSSIER - DOCUMENTO DE TRABAJO PERMANENTE PARA EL ESPACIO DE LAIBE STUDIO
+================================================================================

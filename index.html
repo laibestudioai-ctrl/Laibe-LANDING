@@ -31,7 +31,11 @@
     --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
 
   body {
     background: var(--bg-pure);
@@ -40,6 +44,7 @@
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
+    max-width: 100%;
   }
 
   /* Custom Scrollbar */
@@ -98,6 +103,12 @@
   .nav-cta:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 24px rgba(123, 47, 247, 0.4);
+  }
+  .nav-cta svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    flex-shrink: 0;
   }
 
   /* HERO */
@@ -179,7 +190,7 @@
   .btn-wa svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
 
   /* SECTION BASE */
-  section { padding: 120px 24px; position: relative; }
+  section { padding: 120px 24px; position: relative; overflow: hidden; }
   .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
   .section-label {
     display: inline-block;
@@ -200,7 +211,7 @@
   /* PROBLEMS */
   .problems-bg { background: var(--bg-dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .problems-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: 28px;
   }
   .prob-card {
@@ -246,7 +257,7 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 28px; overflow: hidden;
     box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px var(--brand-purple-glow);
-    position: relative; margin-bottom: 60px;
+    position: relative; margin: 0 auto 60px;
   }
   .mockup-header {
     background: #11121b; padding: 16px 24px;
@@ -330,7 +341,7 @@
 
   /* SOLUTIONS */
   .solutions-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: 24px; margin-bottom: 64px;
   }
   .sol-card {
@@ -430,7 +441,7 @@
 
   /* TESTIMONIALS */
   .testi-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
     gap: 28px; margin-bottom: 64px;
   }
   .testi-card {
@@ -621,9 +632,34 @@
   .text-center { text-align: center; }
   .flex-center { display: flex; justify-content: center; }
   
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-cta span { display: none; }
+    .nav-cta { padding: 10px; border-radius: 50%; }
+    .nav-cta svg { width: 18px; height: 18px; }
+    .logo-text { font-size: 1.1rem; }
+    .logo-svg { width: 32px; height: 32px; }
+    .wa-float {
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+    }
+    .wa-float svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
   @media (max-width: 576px) {
     .btn-wa { width: 100%; justify-content: center; }
     .chat-box { padding: 16px; }
+    section { padding: 80px 16px; }
+    .calc-container { padding: 24px 16px; }
+    .prob-card { padding: 32px 20px; }
+    .testi-card { padding: 32px 20px; }
+    .benefit-item { padding: 24px 16px; gap: 16px; }
+    .hero h1 { font-size: clamp(2rem, 7vw, 5.2rem); }
   }
 </style>
 </head>
@@ -652,7 +688,7 @@
   </a>
   <a class="nav-cta" href="https://wa.me/34633557024?text=Hola Laibe Studio AI, me gustaría digitalizar mi negocio de reformas para controlar mejor mis presupuestos y captar clientes de forma más eficiente." target="_blank">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.842L.01 23.981l6.31-1.654A11.945 11.945 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.818a9.818 9.818 0 01-5.001-1.367l-.358-.213-3.746.982.999-3.648-.233-.373A9.817 9.817 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.421 0 9.818 4.396 9.818 9.818 0 5.422-4.397 9.818-9.818 9.818z"/></svg>
-    Hablar ahora
+    <span>Hablar ahora</span>
   </a>
 </nav>
 
@@ -951,6 +987,7 @@
         <div class="form-group">
           <label class="form-label" for="telefono">Teléfono (WhatsApp)</label>
           <input class="form-input" type="tel" id="telefono" placeholder="Ej. +34 600 000 000" required>
+          <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Introduce tu número con el prefijo internacional (ej: <strong>+346</strong>...)</span>
         </div>
         <div class="form-group">
           <label class="form-label" for="mensaje">¿Qué te gustaría automatizar en tu negocio?</label>
@@ -975,7 +1012,7 @@
     <p class="section-sub" style="margin: 0 auto 40px;">Sincroniza una sesión de 20 minutos directamente con nuestro equipo técnico.</p>
     
     <div class="calendar-wrapper">
-      <iframe src="https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk" style="width: 100%; border:none; overflow: hidden; min-height: 700px;" scrolling="no" id="CHYJ3ZzRD6OtpCGWwRhk_1780484014550"></iframe>
+      <iframe src="https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk?locale=es" style="width: 100%; border:none; overflow: hidden; min-height: 700px;" scrolling="no" id="CHYJ3ZzRD6OtpCGWwRhk_1780484014550"></iframe>
       <script src="https://api.leadconnectorhq.com/js/form_embed.js" type="text/javascript"></script>
     </div>
   </div>
@@ -1108,6 +1145,7 @@
   }
 
   // JAVASCRIPT PUENTE: TRANSFERENCIA DE LEADS DEL FORMULARIO OSCURO AL CRM DE GHL
+  // JAVASCRIPT PUENTE: TRANSFERENCIA DE LEADS AL WEBHOOK DE N8N Y FALLBACK A GHL
   function enviarDatos(event) {
     event.preventDefault();
     
@@ -1117,12 +1155,51 @@
     const nombreReal = document.getElementById('nombre').value.trim();
     const telefonoReal = document.getElementById('telefono').value.trim();
     const mensajeReal = document.getElementById('mensaje').value.trim();
+    const fechaReal = new Date().toLocaleString('es-ES');
+    
+    // Sanitización robusta del número de teléfono
+    let cleanPhone = telefonoReal.replace(/[\s\-\(\)]/g, ''); // Eliminar espacios, guiones y paréntesis
+    cleanPhone = cleanPhone.replace(/^\+/, ''); // Eliminar el signo '+' al principio si existe
+    
+    // Si el número tiene 9 dígitos y empieza por 6, 7 o 9 (España), añadir el prefijo 34
+    if (cleanPhone.length === 9 && (cleanPhone.startsWith('6') || cleanPhone.startsWith('7') || cleanPhone.startsWith('9'))) {
+        cleanPhone = '34' + cleanPhone;
+    }
+    
+    // Actualizar el iframe de la agenda para pre-rellenar los datos y forzar español
+    const calendarIframe = document.getElementById('CHYJ3ZzRD6OtpCGWwRhk_1780484014550');
+    if (calendarIframe) {
+        const ghlPhonePrefill = '+' + cleanPhone; // GHL prefill works best with '+' prefix
+        calendarIframe.src = `https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk?locale=es&firstName=${encodeURIComponent(nombreReal)}&name=${encodeURIComponent(nombreReal)}&phone=${encodeURIComponent(ghlPhonePrefill)}`;
+    }
     
     // UI Loading state
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.7';
     submitBtn.innerText = 'Procesando Diagnóstico...';
     
+    // URL de producción del webhook en tu n8n para Laibe Studio Leads
+    const webhookUrl = "https://76.13.152.6.sslip.io/webhook/laibe-studio-leads";
+    
+    // 1. Enviar lead de forma asíncrona a n8n
+    fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nombre: nombreReal,
+            telefono: cleanPhone, // Enviamos el número limpio sin el '+' a n8n
+            mensaje: mensajeReal,
+            fecha: fechaReal
+        })
+    }).then(response => {
+        console.log("Lead registrado con éxito en n8n.");
+    }).catch(err => {
+        console.error("Error al registrar lead en n8n Webhook:", err);
+    });
+
+    // 2. Intentar registrar también en GHL (Iframe oculto) como doble respaldo
     try {
         const ghlIframe = document.getElementById('inline-WUUsZNKJ27xicTrjOwg7');
         const ghlDoc = ghlIframe.contentDocument || ghlIframe.contentWindow.document;
@@ -1134,46 +1211,41 @@
         
         if (ghlNombre && ghlTelefono) {
             ghlNombre.value = nombreReal;
-            ghlTelefono.value = telefonoReal;
+            ghlTelefono.value = cleanPhone;
             if (ghlCustom) ghlCustom.value = mensajeReal;
             
-            // Disparar evento de cambio nativo para que GHL reconozca los datos
             ghlNombre.dispatchEvent(new Event('input', { bubbles: true }));
             ghlTelefono.dispatchEvent(new Event('input', { bubbles: true }));
             if (ghlCustom) ghlCustom.dispatchEvent(new Event('input', { bubbles: true }));
             
             setTimeout(() => {
                 ghlSubmitBtn.click();
-                statusDiv.innerText = '¡Datos registrados! Selecciona tu fecha en la agenda aquí abajo.';
-                statusDiv.className = 'form-status success';
-                statusDiv.style.display = 'block';
-                
-                // Reset de interfaz y scroll automático a la agenda
-                document.getElementById('formulario-agencia').reset();
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = '1';
-                submitBtn.innerText = 'Solicitar Diagnóstico Gratuito';
-                
-                document.getElementById('agenda-seccion').scrollIntoView({ behavior: 'smooth' });
-            }, 500);
-        } else {
-            throw new Error("Campos no indexados en el iframe");
+            }, 100);
         }
     } catch (err) {
-        // Fallback operativo seguro: si el navegador bloquea el acceso al iframe por políticas cross-domain,
-        // el sistema redirige al usuario de inmediato a la agenda para no perder el lead.
+        console.warn("Backdrop GHL bloqueado por CORS. Continuando con registro en n8n...");
+    }
+
+    // 3. UI éxito y scroll a la agenda
+    setTimeout(() => {
+        statusDiv.innerText = '¡Datos registrados! Selecciona tu fecha en la agenda aquí abajo.';
+        statusDiv.className = 'form-status success';
+        statusDiv.style.display = 'block';
+        
+        document.getElementById('formulario-agencia').reset();
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
         submitBtn.innerText = 'Solicitar Diagnóstico Gratuito';
+        
         document.getElementById('agenda-seccion').scrollIntoView({ behavior: 'smooth' });
-    }
+    }, 800);
   }
 
   window.onload = function() {
     calculateROI();
   }
 </script>
-    <div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
+<div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
     <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</h4>
     <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
         Utilizamos cookies propias y de terceros para analizar el tráfico de la web y optimizar tus campañas de automatización. Puedes aceptar todas las cookies, rechazarlas o configurarlas. Lee nuestra <a href="politica-cookies.html" target="_blank" style="color: #0082f3; text-decoration: none;">Política de Cookies</a>.
@@ -1196,34 +1268,7 @@
         document.getElementById("cookie-banner").style.display = "none";
         
         if (action === 'aceptar') {
-            // Aquí activarías tus scripts de seguimiento (Pixel de Meta, Google Analytics, etc.)
             console.log("Cookies aceptadas por el usuario. Activando scripts...");
-        }
-    }
-</script>
-    <div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
-    <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</h4>
-    <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
-        Utilizamos cookies propias y de terceros para analizar el tráfico de la web y optimizar tus campañas de automatización. Puedes aceptar todas las cookies, rechazarlas o configurarlas. Lee nuestra <a href="politica-cookies.html" target="_blank" style="color: #0082f3; text-decoration: none;">Política de Cookies</a>.
-    </p>
-    <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-        <button onclick="handleCookies('rechazar')" style="background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;">Rechazar todas</button>
-        <button onclick="handleCookies('aceptar')" style="background: linear-gradient(135deg, #0082f3 0%, #7b2ff7 100%); border: none; color: white; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(123, 47, 247, 0.3);">Aceptar todas</button>
-    </div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        if (!localStorage.getItem("cookiesConsent")) {
-            document.getElementById("cookie-banner").style.display = "block";
-        }
-    });
-
-    function handleCookies(action) {
-        localStorage.setItem("cookiesConsent", action);
-        document.getElementById("cookie-banner").style.display = "none";
-        if (action === 'aceptar') {
-            console.log("Cookies aceptadas.");
         }
     }
 </script>

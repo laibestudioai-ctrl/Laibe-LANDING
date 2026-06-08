@@ -1,0 +1,168 @@
+{
+  "name": "WhatsApp Bot Laibe Studio (Standard Nodes with Memory)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "laibestudio-whatsapp-leads",
+        "options": {}
+      },
+      "id": "standard-webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://laibestudio-infraestructura-evolution-api:8080/chat/findMessages/LaibeStudio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "tu_api_key_de_evolution_aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"key\": {\n    \"remoteJid\": \"{{ $('Webhook').item.json.body.data?.key?.remoteJid || ($('Webhook').item.json.body.phone ? ($('Webhook').item.json.body.phone + '@s.whatsapp.net') : ($('Webhook').item.json.body.telefono ? ($('Webhook').item.json.body.telefono + '@s.whatsapp.net') : '')) }}\"\n  },\n  \"limit\": 6\n}",
+        "options": {}
+      },
+      "id": "standard-history",
+      "name": "Buscar Historial",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook').item.json.body;\nconst nombre = body.nombre || \"\";\nconst phone = body.telefono || body.phone || body.data?.key?.remoteJid?.split('@')[0] || \"unknown\";\nconst incomingMessage = body.message || body.data?.message?.conversation || body.data?.message?.extendedTextMessage?.text || \"\";\n\n// Formatear el historial de chat devuelto por la Evolution API (si hay alguno)\nlet chatHistoryText = \"\";\ntry {\n  const messages = input.all(); // Salida del nodo Buscar Historial\n  if (messages && messages.length > 0) {\n    // Invertir el orden para leer cronológicamente\n    const sorted = messages.map(m => m.json).filter(m => m && m.message).reverse();\n    chatHistoryText = sorted.map(m => {\n      const sender = m.key?.fromMe ? \"Asistente\" : \"Cliente\";\n      const text = m.message.conversation || m.message.extendedTextMessage?.text || \"\";\n      return `- ${sender}: ${text}`;\n    }).join(\"\\n\");\n  }\n} catch (e) {\n  console.log(\"No se pudo leer el historial:\", e);\n}\n\nlet promptText = \"\";\nif (nombre) {\n  promptText = `NUEVO REGISTRO DESDE LA LANDING - Nombre: ${nombre}, Teléfono: ${phone}, Mensaje: ${body.mensaje || ''}. Inicia la conversación de WhatsApp saludándolo por su nombre de forma muy natural y pregúntale en qué consiste su proyecto.`;\n} else {\n  promptText = incomingMessage;\n}\n\nreturn {\n  json: {\n    phone,\n    promptText,\n    chatHistoryText,\n    systemInstruction: \"Eres Sofía, asistente comercial automatizada de Laibe Studio AI. Ayudas a empresas de reformas integrales, constructoras y autónomos del sector a digitalizar y automatizar sus procesos. Mantén tus mensajes en un máximo de 2 líneas de texto, con tono profesional, directo y empático. Realiza solo una pregunta por mensaje. Criterios de cualificación: 1. Confirmar que son empresa de reformas/construcción. 2. Preguntar mayor cuello de botella actual (leads lentos, presupuestos manuales, sin CRM). 3. Mencionar que una solución arranca en 1.000€-1.500€ y confirmar si están abiertos a invertir. Si califica, ofréceles agendar sesión de diagnóstico gratuito en laibestudioai.com/#agenda-seccion.\"\n  }\n};"
+      },
+      "id": "standard-code",
+      "name": "Preparar Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=tu_api_key_de_gemini_aqui",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"System Instruction: {{ $json.systemInstruction }}\\n\\nHistorial de la conversación:\\n{{ $json.chatHistoryText || 'No hay historial previo' }}\\n\\nMensaje del usuario:\\n{{ $json.promptText }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "standard-gemini",
+      "name": "Llamar a Gemini",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://laibestudio-infraestructura-evolution-api:8080/message/sendText/LaibeStudio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "tu_api_key_de_evolution_aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Preparar Prompt').item.json.phone }}\",\n  \"options\": {\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n  },\n  \"textMessage\": {\n    \"text\": \"{{ $json.candidates[0].content.parts[0].text }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "standard-evolution",
+      "name": "WhatsApp Out",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Buscar Historial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Historial": {
+      "main": [
+        [
+          {
+            "node": "Preparar Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Prompt": {
+      "main": [
+        [
+          {
+            "node": "Llamar a Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llamar a Gemini": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

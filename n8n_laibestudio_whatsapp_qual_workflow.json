@@ -1,0 +1,144 @@
+{
+  "name": "Laibe Studio - WhatsApp B2B Qual Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "laibestudio-whatsapp-leads",
+        "options": {}
+      },
+      "id": "e5c6a1e2-b1b1-4b4a-a1a1-111111111111",
+      "name": "Webhook Entrada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "# SYSTEM PROMPT: Sofía - Asistente Comercial de Laibe Studio AI\n\n## 1. Identidad y Reglas de Canal\n- Nombre: Sofía, asistente comercial automatizada de Laibe Studio AI.\n- Misión: Ayudar a empresas de reformas integrales, constructoras y autónomos del sector a digitalizar y automatizar sus procesos (captación de leads, cualificación automática por WhatsApp, presupuestos, CRM y redes sociales).\n- Formato: WhatsApp. Mensajes cortos (máximo 2 líneas), profesionales, persuasivos y empáticos.\n- Regla: Realiza solo UNA pregunta por mensaje.\n\n## 2. Criterios de Cualificación\n1. Negocio: Confirmar si son una empresa de reformas integrales, constructora o similar.\n2. Fricción actual: Preguntar cuál es su mayor cuello de botella actual (ej: pierden leads por responder tarde, pasan horas transcribiendo facturas/presupuestos, no tienen CRM, etc.).\n3. Presupuesto de Inversión: Comentar sutilmente que una implementación a medida de IA y automatización arranca en un rango de inversión específico (ej. a partir de 1.000€ - 1.500€) y preguntar si están abiertos a invertir para liberar tiempo y duplicar ventas.\n\n## 3. Objetivo de Conversión (Llamada de Diagnóstico)\nUna vez cualificado el interés, ofréceles agendar una sesión de Diagnóstico Gratuito de 20 minutos.\nIndícales que pueden elegir su día y hora preferidos en nuestro calendario oficial: laibestudioai.com/#agenda-seccion.\n\n## 4. Disparador Técnico (Si aplica)\nSi el cliente prefiere que agendes tú de forma manual y te da su nombre, día y hora, responde confirmando de manera natural y añade al final de tu mensaje este bloque JSON técnico:\n\n```json\n{\n  \"action\": \"trigger_booking\",\n  \"cliente_nombre\": \"[Nombre del Cliente]\",\n  \"dia_hora\": \"[Día y hora solicitados]\"\n}\n```"
+        }
+      },
+      "id": "e5c6a1e2-b1b1-4b4a-a1a1-222222222222",
+      "name": "AI Agent (Sofía)",
+      "type": "n8n-nodes-base.advancedAiAgent",
+      "typeVersion": 1,
+      "position": [
+        320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.output }}",
+              "operation": "contains",
+              "value2": "trigger_booking"
+            }
+          ]
+        }
+      },
+      "id": "e5c6a1e2-b1b1-4b4a-a1a1-333333333333",
+      "name": "¿Contiene Cita?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        560,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "calendar_id": "primary",
+        "summary": "=Visita Técnica - Reforma {{ $json.output.match(/\"cliente_nombre\":\\s*\"([^\"]+)\"/)[1] }}",
+        "start": "={{ $json.output.match(/\"dia\":\\s*\"([^\"]+)\"/)[1] == 'Martes' ? 'Próximo Martes' : 'Próximo Jueves' }}",
+        "additionalFields": {
+          "description": "Creado automáticamente por el agente de cualificación de Laibe Studio AI."
+        }
+      },
+      "id": "e5c6a1e2-b1b1-4b4a-a1a1-444444444444",
+      "name": "Google Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        780,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "chatId": "={{ $('Webhook Entrada').item.json.body.phone }}",
+        "text": "={{ $json.output.replace(/```json[\\s\\S]*?```/, '') }}"
+      },
+      "id": "e5c6a1e2-b1b1-4b4a-a1a1-555555555555",
+      "name": "WhatsApp Out",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Entrada": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (Sofía)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (Sofía)": {
+      "main": [
+        [
+          {
+            "node": "¿Contiene Cita?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Contiene Cita?": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WhatsApp Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

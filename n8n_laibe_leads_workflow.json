@@ -1,0 +1,130 @@
+{
+  "name": "Laibe Studio Leads Webhook (laibe-studio-leads)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "laibe-studio-leads",
+        "options": {}
+      },
+      "id": "webhook-laibe",
+      "name": "Webhook (Laibe Form)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "baseId": "tu_base_id_de_airtable_aqui",
+        "tableId": "Leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nombre",
+              "fieldValue": "={{$json[\"body\"][\"nombre\"] || \"Sin nombre\"}}"
+            },
+            {
+              "fieldId": "Telefono",
+              "fieldValue": "={{$json[\"body\"][\"telefono\"] || \"Sin telefono\"}}"
+            },
+            {
+              "fieldId": "Estado",
+              "fieldValue": "Nuevo"
+            }
+          ]
+        }
+      },
+      "id": "airtable-insert-laibe",
+      "name": "Guardar en Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [
+        500,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://laibestudio-infraestructura-evolution-api:8080/message/sendText/LaibeStudio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "tu_api_key_de_evolution_aqui"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"number\": \"34633557024\",\n  \"options\": {\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n  },\n  \"textMessage\": {\n    \"text\": \"🔔 *¡NUEVO LEAD DE LAIBE STUDIO AI!* 🔔\\n\\n👤 *Nombre:* {{ $json.body.nombre || \\\"No especificado\\\" }}\\n📞 *Teléfono:* {{ $json.body.telefono || \\\"No especificado\\\" }}\\n📝 *Mensaje:* {{ $json.body.mensaje || \\\"Ninguno\\\" }}\\n\\n📂 _Lead guardado automáticamente en Airtable._\"\n  }\n}",
+        "options": {}
+      },
+      "id": "whatsapp-send-laibe",
+      "name": "WhatsApp Notificación Admin",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://76.13.152.6.sslip.io/webhook/laibestudio-whatsapp-leads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"nombre\": \"{{ $json.body.nombre }}\",\n  \"telefono\": \"{{ $json.body.telefono }}\",\n  \"mensaje\": \"{{ $json.body.mensaje }}\"\n}",
+        "options": {}
+      },
+      "id": "trigger-chatbot-leads",
+      "name": "Trigger Chatbot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook (Laibe Form)": {
+      "main": [
+        [
+          {
+            "node": "Guardar en Airtable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "WhatsApp Notificación Admin",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Trigger Chatbot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

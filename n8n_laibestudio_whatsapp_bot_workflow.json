@@ -1,0 +1,220 @@
+{
+  "name": "WhatsApp Bot Laibe Studio",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "laibestudio-whatsapp-leads",
+        "options": {}
+      },
+      "id": "node-webhook-whatsapp",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.nombre ? ('NUEVO REGISTRO DESDE LA LANDING - Nombre: ' + $json.body.nombre + ', Teléfono: ' + $json.body.telefono + ', Mensaje: ' + ($json.body.mensaje || '') + '. Inicia la conversación de WhatsApp saludándolo por su nombre de forma muy natural y pregúntale en qué consiste su proyecto.') : ($json.body.message || $json.body.data?.message?.conversation || $json.body.data?.message?.extendedTextMessage?.text || '') }}",
+        "options": {
+          "systemMessage": "# SYSTEM PROMPT: Sofía - Asistente Comercial de Laibe Studio AI\n\n## 1. Identidad y Reglas de Canal\n- Nombre: Sofía, asistente comercial automatizada de Laibe Studio AI.\n- Misión: Ayudar a empresas de reformas integrales, constructoras y autónomos del sector a digitalizar y automatizar sus procesos.\n- Formato: WhatsApp. Mensajes cortos (máximo 2 líneas), profesionales, persuasivos y empáticos.\n- Regla: Realiza solo UNA pregunta por mensaje.\n\n## 2. Criterios de Cualificación\n1. Negocio: Confirmar si son una empresa de reformas integrales, constructora o similar.\n2. Fricción actual: Preguntar cuál es su mayor cuello de botella actual (ej: pierden leads por responder tarde, pasan horas transcribiendo facturas/presupuestos, no tienen CRM, etc.).\n3. Presupuesto de Inversión: Comentar sutilmente que una implementación a medida de IA y automatización arranca en un rango de inversión específico (ej. a partir de 1.000€ - 1.500€) y preguntar si están abiertos a invertir para liberar tiempo y duplicar ventas.\n\n## 3. Uso de Herramientas (CRÍTICO)\n- Cuando el cliente potencial responda a tus preguntas de cualificación, usa la herramienta 'Airtable Tool' para guardar sus datos (Nombre, Teléfono, Notas) en la base de datos.\n- Si es necesario guardar el contacto en GoHighLevel (GHL), usa la herramienta 'HTTP Request Tool' (GHL Integration) para enviarle la información.\n- Una vez calificado, dile de forma natural que puede agendar una llamada de diagnóstico en: laibestudioai.com/#agenda-seccion."
+        }
+      },
+      "id": "node-ai-agent",
+      "name": "AI Agent",
+      "type": "n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [
+        340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-pro",
+        "options": {}
+      },
+      "id": "node-gemini-model",
+      "name": "Google Gemini Chat Model",
+      "type": "n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        200,
+        480
+      ],
+      "credentials": {
+        "googleIdentifySdk": {
+          "id": "google-gemini-cred",
+          "name": "Google Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionId": "={{ $('Webhook').item.json.body.telefono || $('Webhook').item.json.body.phone || $('Webhook').item.json.body.data?.key?.remoteJid?.split('@')[0] }}"
+      },
+      "id": "node-simple-memory",
+      "name": "Simple Memory",
+      "type": "n8n-nodes-langchain.memorySimple",
+      "typeVersion": 1,
+      "position": [
+        340,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "name": "save_to_airtable",
+        "description": "Guarda los datos del cliente (nombre, teléfono y notas/resumen del proyecto) en la base de datos de Airtable.",
+        "baseId": "tu_base_id_de_airtable_aqui",
+        "tableId": "Leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Nombre",
+              "fieldValue": "={{ $parameter.name }}"
+            },
+            {
+              "fieldId": "Telefono",
+              "fieldValue": "={{ $parameter.phone }}"
+            },
+            {
+              "fieldId": "Notas",
+              "fieldValue": "={{ $parameter.notes }}"
+            }
+          ]
+        }
+      },
+      "id": "node-airtable-tool",
+      "name": "Airtable Tool",
+      "type": "n8n-nodes-langchain.toolAirtable",
+      "typeVersion": 1,
+      "position": [
+        480,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "name": "save_to_ghl",
+        "description": "Envía los datos de contacto y cualificación del cliente a GoHighLevel (GHL) CRM.",
+        "url": "https://laibestudio-api-placeholder/save",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"name\": \"{{ $parameter.name }}\",\n  \"phone\": \"{{ $parameter.phone }}\",\n  \"notes\": \"{{ $parameter.notes }}\"\n}"
+      },
+      "id": "node-http-request-tool",
+      "name": "HTTP Request Tool",
+      "type": "n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1,
+      "position": [
+        600,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://laibestudio-infraestructura-evolution-api:8080/message/sendText/LaibeStudio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "tu_api_key_de_evolution_aqui"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Webhook').item.json.body.phone || $('Webhook').item.json.body.data?.key?.remoteJid?.split('@')[0] }}\",\n  \"options\": {\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n  },\n  \"textMessage\": {\n    \"text\": \"{{ $json.output }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "node-http-request",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
