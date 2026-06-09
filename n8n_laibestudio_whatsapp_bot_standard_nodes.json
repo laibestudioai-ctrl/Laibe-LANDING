@@ -106,7 +106,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"number\": \"{{ $('Preparar Prompt').item.json.phone }}\",\n  \"options\": {\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n  },\n  \"textMessage\": {\n    \"text\": \"{{ $json.candidates[0].content.parts[0].text }}\"\n  }\n}",
+        "jsonBody": "={\n  \"number\": \"{{ $('Preparar Prompt').item.json.phone }}\",\n  \"text\": \"{{ $json.candidates[0].content.parts[0].text }}\"\n}",
         "options": {}
       },
       "id": "standard-evolution",

@@ -64,7 +64,7 @@
             }
           ]
         },
-        "jsonBody": "={\n  \"number\": \"34633557024\",\n  \"options\": {\n    \"delay\": 1200,\n    \"presence\": \"composing\"\n  },\n  \"textMessage\": {\n    \"text\": \"🔔 *¡NUEVO LEAD DE LAIBE STUDIO AI!* 🔔\\n\\n👤 *Nombre:* {{ $json.body.nombre || \\\"No especificado\\\" }}\\n📞 *Teléfono:* {{ $json.body.telefono || \\\"No especificado\\\" }}\\n📝 *Mensaje:* {{ $json.body.mensaje || \\\"Ninguno\\\" }}\\n\\n📂 _Lead guardado automáticamente en Airtable._\"\n  }\n}",
+        "jsonBody": "={\n  \"number\": \"34633557024\",\n  \"text\": \"🔔 *¡NUEVO LEAD DE LAIBE STUDIO AI!* 🔔\\n\\n👤 *Nombre:* {{ $json.body.nombre || \\\"No especificado\\\" }}\\n📞 *Teléfono:* {{ $json.body.telefono || \\\"No especificado\\\" }}\\n📝 *Mensaje:* {{ $json.body.mensaje || \\\"Ninguno\\\" }}\\n\\n📂 _Lead guardado automáticamente en Airtable._\"\n}",
         "options": {}
       },
       "id": "whatsapp-send-laibe",
