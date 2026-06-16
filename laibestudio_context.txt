@@ -1,7 +1,7 @@
 ================================================================================
           DOSSIER DE CONTEXTO Y DOCUMENTACIÓN DE PROYECTO: LAIBE STUDIO AI
 ================================================================================
-Última actualización: 2026-06-08
+Última actualización: 2026-06-16
 Fichero: laibestudio_context.txt
 Directorio del Proyecto: C:\Users\Natal\Documents\antigravity\Laibe-LANDING
 Propietario / Fundador: Juan Pablo Guerrero
@@ -91,15 +91,16 @@ El backend de la agencia está auto-hospedado en un VPS Hostinger con Easypanel:
 - Panel de control Easypanel: Puerto 3000 (Administrador de contenedores Docker).
 - Servidor n8n:
   * URL Pública: https://76.13.152.6.sslip.io (o puerto local 8085 en Easypanel).
+  * URL de Red local interna de llamada de herramientas: http://localhost:5678 (permite al contenedor de n8n saltarse las restricciones de loopback del cortafuegos del VPS).
   * Persistencia de datos: Configurada en el volumen de Docker `/home/node/.n8n`
     para evitar pérdidas de credenciales o flujos tras reinicios.
-  * Versión activa: 2.23.4 (Community Edition con soporte nativo de APIs).
+  * Versión activa: 2.25.6 (Self Hosted).
 - Evolution API (WhatsApp Gateway):
   * Contenedor Docker: `laibestudio-infraestructura-evolution-api` (Puerto 8080).
   * URL de Red Docker interna para llamadas n8n:
     `http://laibestudio-infraestructura-evolution-api:8080`
   * Endpoint de envío de texto:
-    `POST /message/sendText/LaibeStudio` (instancia de producción: LaibeStudio).
+    `POST /message/sendText/laibestudio-whatsapp` (instancia de producción: laibestudio-whatsapp).
   * Cabecera obligatoria de autenticación: `apikey` (gestionada en los HTTP Request).
 
 
@@ -116,24 +117,22 @@ Fichero local: [n8n_laibe_leads_workflow.json](file:///C:/Users/Natal/Documents/
 - Acción 3 (Trigger del Bot): Hace un POST automático al Webhook del chatbot para
   que el bot inicie la conversación en frío saludando al cliente por su nombre.
 
-FLUJO 2: CHATBOT DE CUALIFICACIÓN POR WHATSAPP (Sofía - IA con Memoria)
-Fichero local: [n8n_laibestudio_whatsapp_bot_standard_nodes.json](file:///C:/Users/Natal/Documents/antigravity/Laibe-LANDING/n8n_laibestudio_whatsapp_bot_standard_nodes.json)
-- Tipo: Estructura compatible con n8n v2 basada en nodos estándar (sin dependencias
-  externas de LangChain para evitar errores de carga en servidores restringidos).
-- Funcionamiento paso a paso:
-  1. Trigger Webhook: Escucha en `laibestudio-whatsapp-leads` tanto mensajes entrantes
-     de la Evolution API como reenvíos automáticos del formulario de la landing.
-  2. Buscar Historial: Llama al endpoint `POST /chat/findMessages/LaibeStudio` de la
-     Evolution API para recuperar los últimos 6 mensajes del chat del cliente. Esto
-     actúa como una memoria dinámica transparente sin bases de datos adicionales.
-  3. Preparar Prompt (Código JS):
-     * Identifica si es un lead nuevo (se le saluda por su nombre) o un mensaje de chat.
-     * Limpia y concatena los mensajes anteriores en un diálogo ordenado cronológicamente.
-     * Inyecta la Identidad de Sofía y las directrices comerciales.
-  4. Llamar a Gemini: Hace un POST HTTPS a la API oficial de Google Gemini 1.5 Flash
-     pasándole las instrucciones del sistema, el historial del chat y el nuevo mensaje.
-  5. WhatsApp Out: Toma el texto generado por Gemini y lo envía al cliente a través
-     de la Evolution API con un retraso natural de simulación de escritura (delay: 1200ms).
+FLUJO 2: CHATBOT DE CUALIFICACIÓN E INTEGRACIÓN CON GHL (Sofía - Final con GHL)
+Fichero local: [n8n_compiled_whatsapp_bot_and_ghl.json](file:///C:/Users/Natal/Documents/antigravity/optimistic-curie/n8n_compiled_whatsapp_bot_and_ghl.json)
+- Trigger Principal: Webhook en `/laibestudio-whatsapp-leads` que recibe los mensajes entrantes de Evolution API.
+- Filtro Anti-Bucle: Un nodo condicional que valida que `fromMe` sea falso para evitar que el bot responda a sus propios mensajes.
+- Agente de IA: LangChain Agent con Groq Chat Model (`llama-3.3-70b-versatile`) y memoria simple.
+- Herramienta save_to_ghl (HTTP Request Tool):
+  * Lógica: Registra al lead en GoHighLevel tras calificarlo.
+  * Configuración: Modo JSON enviando al webhook local `http://localhost:5678/webhook/guardar-lead-ghl` para evitar bloqueos de loopback.
+- WhatsApp Out: Retardo de 5 segundos antes de enviar para simular un comportamiento humano y envío final vía Evolution API.
+
+FLUJO PUENTE GHL (Webhook Puente -> Crear Contacto -> Añadir Nota):
+- Trigger Webhook: `Webhook GHL Puente2` escuchando en `/guardar-lead-ghl`.
+  * Configuración de respuesta: Modo "Immediately" (`onReceived` con HTTP 200 OK) para responder al instante a Evolution API, evitando conexiones caídas y duplicación de mensajes por reintentos de webhook de WhatsApp.
+- Crear Contacto (`HTTP Request`): Hace un POST a `https://services.leadconnectorhq.com/contacts/upsert` con la cabecera `Version: 2021-07-28` y credenciales OAuth2 de `ghl Laibe` (Location ID de subcuenta: `eY60RFQxyhLOrVoydvrV`).
+  * Nota de Expresión: El cuerpo JSON está configurado en modo Fixed (con el signo `=` inicial en la estructura del flujo) para que las variables como `{{ $json.body.phone }}` se evalúen y no se envíe la cadena literal, evitando el error `Invalid country calling code`.
+- Añadir Nota (`HTTP Request1`): Hace un POST a `https://services.leadconnectorhq.com/contacts/{{ $json.contact.id }}/notes` inyectando la nota recopilada por Sofía.
 
 
 5. IDENTIDAD Y DIRECTRICES DEL AGENTE DE IA (SOFÍA)
@@ -143,28 +142,21 @@ El prompt de Sofía está diseñado bajo estrictas reglas de captación B2B:
 A. Identidad y Canal:
 - Nombre: Sofía, asistente comercial automatizada de Laibe Studio AI.
 - Canal: WhatsApp.
-- Formato de respuesta: Mensajes cortos (máximo 2 líneas), tono profesional,
+- Formato de respuesta: Mensajes cortos (máximo 2-3 líneas), tono profesional,
   directo, empático y persuasivo.
 - Regla de oro: Realizar únicamente UNA pregunta por mensaje.
 
-B. Proceso de Cualificación (Filtros):
-1. Validación del Negocio: Confirmar si el contacto es una empresa de reformas,
-   constructora o autónomo del sector (su nicho ideal).
-2. Dolor Operativo (Fricción): Identificar cuál es su mayor cuello de botella actual:
-   * Pierde clientes por tardar en responderles.
-   * Pasa noches y fines de semana picando presupuestos de facturas a mano en Excel.
-   * No tiene un CRM organizado (pierde control de seguimientos).
-3. Presupuesto (Filtro Económico): Explicar sutilmente que un desarrollo e
-   implementación de IA a medida en su negocio arranca en un rango de inversión
-   de entre 1.000€ y 1.500€. Preguntar directamente si están abiertos a invertir
-   para solucionar sus cuellos de botella y duplicar sus ventas.
+B. Proceso de Cualificación (Filtros en orden):
+1. Validación del Negocio: Confirmar si el contacto es del sector de reformas o construcción.
+2. Dolor Operativo (Fricción): Identificar cuál es su mayor cuello de botella actual (tiempos de respuesta, presupuestos a mano, falta de CRM).
+3. Presupuesto (Filtro Económico con ROI):
+   - Rango de inversión: De entre 1.000€ y 1.500€ para implementaciones a medida.
+   - Justificación de ROI obligatoria en el mismo mensaje antes de pedir respuesta (ej. explicar las +40 horas al mes que recuperarán).
+4. Datos de Contacto: Solicitar Nombre completo y Teléfono para preparar la ficha de diagnóstico.
 
 C. Conversión (Cierre):
-- Una vez calificado el interés y presupuesto del cliente, ofrecer una llamada de
-  Diagnóstico Gratuito de 20 minutos.
-- Instrucciones de agenda: Redirigir al cliente a la sección de reserva del
-  calendario oficial en: laibestudioai.com/#agenda-seccion (nunca dar horas
-  fijas en el chat, el cliente debe agendar en el widget de GHL).
+- En cuanto el cliente facilite sus datos, se ejecuta la herramienta `save_to_ghl` de inmediato.
+- Tras el éxito de la herramienta, agradecer el registro comercial y facilitarle el enlace de reserva oficial: laibestudioai.com/#agenda-seccion para reservar la sesión en el calendario de GHL.
 
 
 6. ESTRATEGIA DE CONTENIDOS EN INSTAGRAM (@juanpabloguerre.ai)

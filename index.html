@@ -4,6 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laibe Studio AI - Automatización de Élite para Reformas Integrales</title>
+    <!-- Preconexiones DNS para mejorar WPO -->
+    <link rel="preconnect" href="https://api.leadconnectorhq.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- SEO Básico y Metadatos -->
+    <meta name="description" content="Automatiza tu negocio de reformas con agentes de IA y flujos n8n. Cualificación de leads 24/7, integración con WhatsApp y CRM GoHighLevel en España.">
+    <link rel="canonical" href="https://laibestudioai.com/">
+    
+    <!-- Open Graph (Compartir en LinkedIn/WhatsApp) -->
+    <meta property="og:title" content="Laibe Studio AI - Automatización con IA y CRMs B2B">
+    <meta property="og:description" content="Sistemas conversacionales e integraciones de n8n y GoHighLevel para optimizar tu captación y escalar facturación.">
+    <meta property="og:image" content="https://laibestudioai.com/favicon.png">
+    <meta property="og:url" content="https://laibestudioai.com/">
+    <meta property="og:type" content="website">
+
+    <!-- Schema Markup (Datos Estructurados) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Laibe Studio AI",
+      "url": "https://laibestudioai.com/",
+      "logo": "https://laibestudioai.com/favicon.png",
+      "image": "https://laibestudioai.com/favicon.png",
+      "description": "Agencia especializada en la automatización de procesos B2B, flujos de trabajo n8n, configuración de CRM GoHighLevel y desarrollo de agentes de Inteligencia Artificial en España.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "ES"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/laibe-studio-ai"
+      ]
+    }
+    </script>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -1000,6 +1034,26 @@
           <label class="form-label" for="mensaje">¿Qué te gustaría automatizar en tu negocio?</label>
           <textarea class="form-input" id="mensaje" rows="4" placeholder="Ej. Captar clientes de reformas en mi zona y cualificar leads por WhatsApp." style="resize: none;" required></textarea>
         </div>
+        
+        <!-- Checkbox de Aceptación Obligatoria (RGPD) -->
+        <div class="form-group" style="flex-direction: row; align-items: flex-start; gap: 10px; margin-bottom: 20px;">
+          <input type="checkbox" id="acepto-privacidad" required style="width: 18px; height: 18px; margin-top: 3px; cursor: pointer;">
+          <label for="acepto-privacidad" style="font-size: 0.85rem; color: var(--text-muted); cursor: pointer; line-height: 1.4;">
+            He leído y acepto la <a href="politica-privacidad.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; font-weight: 500;">Política de Privacidad</a> y consiento el tratamiento de mis datos personales para recibir el Diagnóstico Gratuito y comunicaciones comerciales.
+          </label>
+        </div>
+
+        <!-- Cláusula Informativa de Primera Capa (RGPD/LOPD-GDD) -->
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; text-align: left;">
+          <strong>Información básica sobre protección de datos:</strong><br>
+          • <strong>Responsable:</strong> Juan Pablo Guerrero Rodríguez.<br>
+          • <strong>Finalidad:</strong> Gestionar su solicitud de Diagnóstico Gratuito, automatización conversacional y enviarle actualizaciones de nuestros servicios de IA.<br>
+          • <strong>Legitimación:</strong> Consentimiento inequívoco del interesado al marcar la casilla.<br>
+          • <strong>Destinatarios:</strong> Plataformas de CRM y automatización (n8n, GoHighLevel) bajo estricto encargo de tratamiento. No se cederán a terceros salvo obligación legal.<br>
+          • <strong>Derechos:</strong> Acceso, rectificación, supresión, oposición, limitación y portabilidad. Puede ejercitarlos escribiendo a <em>contacto@laibestudioai.com</em>.<br>
+          • <strong>Más información:</strong> Consulte nuestra <a href="politica-privacidad.html" target="_blank" style="color: var(--brand-blue); text-decoration: none;">Política de Privacidad completa</a>.
+        </div>
+
         <button type="submit" class="btn-wa btn-submit" id="btn-submit-premium">
           <svg viewBox="0 0 24 24" style="fill:none; stroke:currentColor; stroke-width:2.5;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           Solicitar Diagnóstico Gratuito
@@ -1019,8 +1073,8 @@
     <p class="section-sub" style="margin: 0 auto 40px;">Sincroniza una sesión de 20 minutos directamente con nuestro equipo técnico.</p>
     
     <div class="calendar-wrapper">
-      <iframe src="https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk?locale=es" style="width: 100%; border:none; min-height: 950px;" id="CHYJ3ZzRD6OtpCGWwRhk_1780484014550"></iframe>
-      <script src="https://api.leadconnectorhq.com/js/form_embed.js" type="text/javascript"></script>
+      <iframe src="https://api.leadconnectorhq.com/widget/booking/CHYJ3ZzRD6OtpCGWwRhk?locale=es" style="width: 100%; border:none; min-height: 950px;" id="CHYJ3ZzRD6OtpCGWwRhk_1780484014550" loading="lazy"></iframe>
+      <script src="https://api.leadconnectorhq.com/js/form_embed.js" type="text/javascript" defer></script>
     </div>
   </div>
 </section>
@@ -1029,14 +1083,16 @@
   © 2026 <span>Laibe Studio AI</span>. Todos los derechos reservados.<br>
   <span style="font-size:0.75rem; opacity:0.6; margin-top: 10px; display:inline-block; margin-bottom: 15px;">Impulsamos empresas, potenciamos resultados. Con Inteligencia Artificial.</span>
   <div style="margin-top: 10px;">
+    <a href="aviso-legal.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Aviso Legal</a> | 
     <a href="politica-privacidad.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Política de Privacidad</a> | 
+    <a href="politica-cookies.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Política de Cookies</a> | 
     <a href="terminos-servicios.html" target="_blank" style="color: var(--brand-blue); text-decoration: none; margin: 0 10px;">Términos y Condiciones</a>
   </div>
 </footer>
 
 <div id="ghl-hidden-form-container" style="display: none !important; visibility: hidden !important; height: 0px; overflow: hidden; position: absolute; pointer-events: none;">
-    <iframe src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7" style="width:100%; height:100%; border:none;" id="inline-WUUsZNKJ27xicTrjOwg7"></iframe>
-    <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+    <iframe src="https://api.leadconnectorhq.com/widget/form/WUUsZNKJ27xicTrjOwg7" style="width:100%; height:100%; border:none;" id="inline-WUUsZNKJ27xicTrjOwg7" loading="lazy"></iframe>
+    <script src="https://link.msgsndr.com/js/form_embed.js" defer></script>
 </div>
 
 <script>
@@ -1156,6 +1212,13 @@
   function enviarDatos(event) {
     event.preventDefault();
     
+    // Verificación de consentimiento del RGPD en el frontend
+    const privacidadCheck = document.getElementById('acepto-privacidad');
+    if (!privacidadCheck || !privacidadCheck.checked) {
+        alert("Debe aceptar la Política de Privacidad para enviar el formulario.");
+        return;
+    }
+    
     const submitBtn = document.getElementById('btn-submit-premium');
     const statusDiv = document.getElementById('form-status');
     
@@ -1253,7 +1316,7 @@
   }
 </script>
 <div id="cookie-banner" style="position: fixed; bottom: 24px; left: 24px; right: 24px; max-width: 500px; background: #0d0e15; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.7); display: none; font-family: 'DM Sans', sans-serif;">
-    <h4 style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</h4>
+    <p class="cookie-banner-title" style="color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px; font-weight: 700;">Control de Privacidad</p>
     <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px;">
         Utilizamos cookies propias y de terceros para analizar el tráfico de la web y optimizar tus campañas de automatización. Puedes aceptar todas las cookies, rechazarlas o configurarlas. Lee nuestra <a href="politica-cookies.html" target="_blank" style="color: #0082f3; text-decoration: none;">Política de Cookies</a>.
     </p>
