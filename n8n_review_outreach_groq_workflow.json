@@ -1,0 +1,396 @@
+{
+  "name": "Shopify Review Outreach Drafts - Laibe Studio AI (Groq & Hunter)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": "0 9 * * *",
+        "options": {}
+      },
+      "id": "schedule-trigger-reviews",
+      "name": "Schedule Trigger (Daily 9AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -100,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "actorId": "apify~shopify-reviews-scraper",
+        "runInput": "{\n  \"startUrls\": [\n    {\n      \"url\": \"https://apps.shopify.com/competidor-1/reviews\"\n    },\n    {\n      \"url\": \"https://apps.shopify.com/competidor-2/reviews\"\n    }\n  ],\n  \"maxItems\": 10,\n  \"onlyNewest\": true\n}",
+        "options": {}
+      },
+      "id": "apify-reviews-scraper",
+      "name": "Apify Review Scraper",
+      "type": "n8n-nodes-base.apify",
+      "typeVersion": 1,
+      "position": [
+        120,
+        280
+      ],
+      "credentials": {
+        "apifyApi": {
+          "id": "",
+          "name": "Apify API Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.rating }}",
+              "operation": "lessOrEqual",
+              "value2": 4
+            }
+          ]
+        }
+      },
+      "id": "filter-negative-reviews",
+      "name": "Filter Rating <= 4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        320,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "lookup",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Sheet1"
+        },
+        "lookupColumn": "Review ID",
+        "lookupValue": "={{ $json.id }}",
+        "options": {}
+      },
+      "id": "sheets-lookup-processed",
+      "name": "Check Log (Google Sheets)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        520,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets OAuth2 Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json[\"row\"] !== undefined }}",
+              "operation": "isFalse"
+            }
+          ]
+        }
+      },
+      "id": "filter-already-processed",
+      "name": "Is New Review?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        720,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://google.serper.dev/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-KEY",
+              "value": ""
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"q\": \"{{ $('Filter Rating <= 4').item.json.author }} {{ $('Filter Rating <= 4').item.json.title || '' }} shopify store official website\"\n}",
+        "options": {}
+      },
+      "id": "serper-find-website",
+      "name": "Find Reviewer Website (Serper)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "domainSearch",
+        "domain": "={{ $json.organic[0].link.split('/')[2].replace('www.', '') }}",
+        "options": {}
+      },
+      "id": "hunter-find-email",
+      "name": "Find Email (Hunter)",
+      "type": "n8n-nodes-base.hunter",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        180
+      ],
+      "credentials": {
+        "hunterApi": {
+          "id": "",
+          "name": "Hunter API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Redactar una propuesta comercial fría y altamente personalizada dirigida a un dueño de negocio basándose en su reseña de Shopify.\n\n### Datos del Contacto:\n- Nombre del Lead: {{ $('Hunter (Enrichment)').item.json.first_name || $('Filter Rating <= 4').item.json.author }}\n- Tienda/Negocio: {{ $('Hunter (Enrichment)').item.json.domain }}\n- Reseña Escrita (Motivo del Dolor): {{ $('Filter Rating <= 4').item.json.body }}\n- Calificación de la reseña: {{ $('Filter Rating <= 4').item.json.rating }} estrellas\n\nGenera un correo de ventas persuasivo y directo en español siguiendo las directrices de Laibe Studio AI.",
+        "options": {
+          "systemMessage": "# PROMPT DEL SISTEMA: Outbound Strategist - Laibe Studio AI\n\n## 1. Misión del Correo\nEl objetivo único de este correo frío es llamar la atención del dueño del negocio, empatizar con el problema/dolor operativo que ha expuesto en su reseña y conseguir una videollamada corta de 15 minutos (sin compromiso) para auditar sus flujos de trabajo actuales y presentarle cómo automatizar su captación, presupuestos y CRM con agentes de IA.\n\n## 2. Directrices de Estructura y Redacción (Copywriting B2B de Élite)\n- **Asunto Persuasivo y Curioso:** Debe ser corto (menos de 6 palabras) y adaptado al contexto (ej. \"Cuello de botella en tu Shopify {{ $parameter.name }}\" o \"Sobre tu reseña en Shopify y procesos manuales\"). No utilices títulos corporativos aburridos.\n- **Estructura del Cuerpo:**\n  1. **Gancho inicial personalizado (0% spam):** Haz mención directa y empática a la reseña reciente que escribieron (ej: \"He leído tu comentario sobre el dolor de cabeza que te dio la integración de... \").\n  2. **El Dolor del Negocio Tradicional:** Explica brevemente que muchas empresas tradicionales (como reformas, constructoras, despachos o tiendas de Shopify) pierden hasta un 80% de conversión y dedican más de 40 horas al mes a tareas manuales (redactar presupuestos desde cero, picar datos en Excel o responder leads tarde).\n  3. **La Solución (Laibe Studio AI):** Presenta de forma directa y tecnológica que en Laibe Studio AI automatizamos estos procesos construyendo agentes de IA conversacionales y pipelines automatizados integrando herramientas como n8n y GoHighLevel.\n  4. **Llamada a la Acción (CTA) de Bajo Umbral:** No intentes vender nada en este correo. Ofrece una sesión de consultoría técnica de 15 minutos gratis donde auditaremos sus procesos. Ejemplo: \"¿Tendrías 15 minutos esta semana para ver cómo podemos eliminar este cuello de botella y automatizarlo?\"\n- **Tono:** Profesional, directo, sin rodeos, cercano y empático. Huye de rodeos formales típicos como \"Estimado Señor/Señora\" o \"Espero que este email le encuentre bien\"."
+        }
+      },
+      "id": "groq-email-generator",
+      "name": "Generate Email Draft (Groq)",
+      "type": "n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        1320,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "id": "groq-llama-model",
+      "name": "Groq LLM (Llama 3.3)",
+      "type": "n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1220,
+        460
+      ],
+      "credentials": {
+        "groqApi": {
+          "id": "",
+          "name": "Groq API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "email": "={{ $('Hunter (Enrichment)').item.json.email || '' }}",
+        "subject": "={{ $json.output.split('Asunto:')[1]?.split('\\n')[0]?.trim() || 'Automatización e IA para tu negocio' }}",
+        "bodyType": "plain",
+        "message": "={{ $json.output.split('Cuerpo:')[1] || $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "gmail-create-draft",
+      "name": "Create Draft (Gmail)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1550,
+        180
+      ],
+      "credentials": {
+        "gmailOAuth2Api": {
+          "id": "",
+          "name": "Gmail Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Sheet1"
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Review ID",
+              "fieldValue": "={{ $('Filter Rating <= 4').item.json.id }}"
+            },
+            {
+              "fieldId": "Author",
+              "fieldValue": "={{ $('Filter Rating <= 4').item.json.author }}"
+            },
+            {
+              "fieldId": "Rating",
+              "fieldValue": "={{ $('Filter Rating <= 4').item.json.rating }}"
+            },
+            {
+              "fieldId": "Review Text",
+              "fieldValue": "={{ $('Filter Rating <= 4').item.json.body }}"
+            },
+            {
+              "fieldId": "Contact Email",
+              "fieldValue": "={{ $('Hunter (Enrichment)').item.json.email || 'No email found' }}"
+            },
+            {
+              "fieldId": "Draft Status",
+              "fieldValue": "Created"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sheets-log-lead",
+      "name": "Log Lead (Google Sheets)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        1750,
+        280
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets OAuth2 Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (Daily 9AM)": {
+      "main": [
+        [
+          {
+            "node": "Apify Review Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify Review Scraper": {
+      "main": [
+        [
+          {
+            "node": "Filter Rating <= 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Rating <= 4": {
+      "main": [
+        [
+          {
+            "node": "Check Log (Google Sheets)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Log (Google Sheets)": {
+      "main": [
+        [
+          {
+            "node": "Is New Review?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is New Review?": {
+      "main": [
+        [
+          {
+            "node": "Find Reviewer Website (Serper)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Reviewer Website (Serper)": {
+      "main": [
+        [
+          {
+            "node": "Find Email (Hunter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Email (Hunter)": {
+      "main": [
+        [
+          {
+            "node": "Generate Email Draft (Groq)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq LLM (Llama 3.3)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Email Draft (Groq)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Email Draft (Groq)": {
+      "main": [
+        [
+          {
+            "node": "Create Draft (Gmail)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Draft (Gmail)": {
+      "main": [
+        [
+          {
+            "node": "Log Lead (Google Sheets)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
